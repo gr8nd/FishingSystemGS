@@ -1,5 +1,7 @@
 package com.mustapha.fishingsystemgs.activities;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,8 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     private List<Object> objects;
+    private RelativeLayout relativeLayout;
+    private Button addPGRBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
         objects.addAll(ts);
 
         Button viewPGRBtn = findViewById(R.id.view_pgr);
-        Button addPGRBtn = findViewById(R.id.add_mother);
-        RelativeLayout relativeLayout = findViewById(R.id.house1);
+        addPGRBtn = findViewById(R.id.add_mother);
+        relativeLayout = findViewById(R.id.house1);
         Button addBtn = findViewById(R.id.add);
         SearchView searchView = findViewById(R.id.searchView);
 
@@ -96,9 +100,10 @@ public class MainActivity extends AppCompatActivity {
                 String dna = UUID.randomUUID().toString();
                 PGR pgr = new PGR(name, firstDecimalNum, secondDecimalNum, thirdDecimalNum, dna);
                 pgrDb.insert(pgr);
+                displayAlert("Your new PGR has been successfully stored.", "Stored");
             }catch (Exception ignored)
             {
-
+                displayAlert("Please type first decimal and second decimal and then click on the Add button.", "Error Occurred");
             }
             relativeLayout.setVisibility(View.GONE);
             addPGRBtn.setVisibility(View.VISIBLE);
@@ -172,5 +177,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return objectArrayList;
+    }
+
+    private void displayAlert(@Nullable String message, String title) {
+        runOnUiThread(() -> {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setCancelable(true)
+                    .setPositiveButton("Ok", (dialogInterface, i) -> {
+                    })
+                    .create();
+            dialog.show();
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        relativeLayout.setVisibility(View.GONE);
+        addPGRBtn.setVisibility(View.VISIBLE);
+        super.onBackPressed();
     }
 }

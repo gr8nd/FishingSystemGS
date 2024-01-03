@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mustapha.fishingsystemgs.classes.PGR;
@@ -76,18 +78,47 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                 holder.relativeLayout.setVisibility(View.GONE);
                 holder.addTs.setVisibility(View.VISIBLE);
                 String s1 = holder.tsNameEdit.getText().toString();
-                String s2 = s1 + " " + pgr.getThirdDecimalNumber();
-                TSDatabase tsDb = new TSDatabase(context,
-                        "tss.db", null, 1);
-                TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna());
-                tsDb.insert(ts);
+                if(s1.isEmpty())
+                {
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setTitle("Error Occurred")
+                            .setMessage("Please type the TS name and click on the Add button.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            })
+                            .create();
+                    dialog.show();
+                }else {
+                    String s2 = s1 + " " + pgr.getThirdDecimalNumber();
+                    TSDatabase tsDb = new TSDatabase(context,
+                            "tss.db", null, 1);
+                    TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna());
+                    tsDb.insert(ts);
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setTitle("Stored")
+                            .setMessage("Your new TS has been successfully stored.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            })
+                            .create();
+                    dialog.show();
+                }
+
             }catch (Exception ignored)
             {
-
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setTitle("Error Occurred")
+                        .setMessage("Please type the TS name and click on the Add button.")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        })
+                        .create();
+                dialog.show();
             }
         });
 
     }
+
 
     @Override
     public int getItemCount() {
