@@ -45,6 +45,8 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         PGR pgr = pgrs.get(position);
         holder.name.setText(pgr.getName());
+        String n = "(" + (position + 1) + ")";
+        holder.number.setText(n);
         holder.addTs.setOnClickListener(view -> {
             holder.addTs.setVisibility(View.GONE);
             holder.relativeLayout.setVisibility(View.VISIBLE);
@@ -70,14 +72,19 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         });
 
         holder.add.setOnClickListener(view -> {
-            holder.relativeLayout.setVisibility(View.GONE);
-            holder.addTs.setVisibility(View.VISIBLE);
-            String s1 = holder.tsNameEdit.getText().toString();
-            String s2 = s1 + " " + pgr.getThirdDecimalNumber();
-            TSDatabase tsDb = new TSDatabase(context,
-                    "tss.db", null, 1);
-            TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna());
-            tsDb.insert(ts);
+            try {
+                holder.relativeLayout.setVisibility(View.GONE);
+                holder.addTs.setVisibility(View.VISIBLE);
+                String s1 = holder.tsNameEdit.getText().toString();
+                String s2 = s1 + " " + pgr.getThirdDecimalNumber();
+                TSDatabase tsDb = new TSDatabase(context,
+                        "tss.db", null, 1);
+                TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna());
+                tsDb.insert(ts);
+            }catch (Exception ignored)
+            {
+
+            }
         });
 
     }
@@ -98,7 +105,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView name, ts;
+        private final TextView name, ts, number;
         private final Button addTs, add;
         private final RelativeLayout relativeLayout;
         private EditText tsNameEdit;
@@ -108,6 +115,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
 
             name = view.findViewById(R.id.name);
             addTs =view.findViewById(R.id.add_ts);
+            number = view.findViewById(R.id.number);
             add = view.findViewById(R.id.add);
             relativeLayout = view.findViewById(R.id.house1);
             tsNameEdit = view.findViewById(R.id.tsNameEdit);
