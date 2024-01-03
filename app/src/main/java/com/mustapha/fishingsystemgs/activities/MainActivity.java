@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 displayAlert("Your new PGR has been successfully stored.", "Stored");
             }catch (Exception ignored)
             {
-                displayAlert("Please type first decimal and second decimal and then click on the Add button.", "Error Occurred");
+                displayAlert("Please type First Decimal first them type the Second Decimal and then click on the Add button.", "Error Occurred");
             }
             relativeLayout.setVisibility(View.GONE);
             addPGRBtn.setVisibility(View.VISIBLE);
