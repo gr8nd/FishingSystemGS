@@ -173,7 +173,17 @@ public class MainActivity extends AppCompatActivity {
                 PGR pgr = (PGR) object;
                 String name = pgr.getName().toLowerCase();
                 if (name.contains(query)) {
-                    objectArrayList.add(object);
+                    for(Object o: this.objects)
+                    {
+                        if(o instanceof TS)
+                        {
+                            TS ts = (TS) o;
+                            if(ts.getDnaOfMother().equals(pgr.getDna()))
+                            {
+                                objectArrayList.add(ts);
+                            }
+                        }
+                    }
                 }
             } else if (object instanceof TS) {
                 TS ts = (TS) object;
@@ -203,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         relativeLayout.setVisibility(View.GONE);
         addPGRBtn.setVisibility(View.VISIBLE);
+        finish();
         super.onBackPressed();
     }
 
