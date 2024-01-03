@@ -195,9 +195,18 @@
         android:queryHint="Search PGR or TS"
         android:iconifiedByDefault="false" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchView"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/purple_700"
+        android:id="@+id/pgr_searched"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_below="@id/searchView"
+        android:layout_below="@id/pgr_searched"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:background="@color/white"

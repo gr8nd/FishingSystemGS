@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Object> objects;
     private RelativeLayout relativeLayout;
     private Button addPGRBtn;
+    private TextView pgrSearched;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         objects = new ArrayList<>();
+
+        pgrSearched = findViewById(R.id.pgr_searched);
 
         PGRDatabase pgrDb = new PGRDatabase(MainActivity.this,
                 "pgrs.db", null, 1);
@@ -110,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 displayAlert("Your new PGR has been successfully stored.", "Stored");
             }catch (Exception ignored)
             {
-                displayAlert("Please type First Decimal first them type the Second Decimal and then click on the Add button.", "Error Occurred");
+                displayAlert("Please type First Decimal first, then type the Second Decimal and then click on the Add button.", "Error Occurred");
             }
             relativeLayout.setVisibility(View.GONE);
             addPGRBtn.setVisibility(View.VISIBLE);
@@ -172,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
             if (object instanceof PGR) {
                 PGR pgr = (PGR) object;
                 String name = pgr.getName().toLowerCase();
+                pgrSearched.setText(name);
                 if (name.contains(query)) {
                     for(Object o: this.objects)
                     {
