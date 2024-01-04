@@ -424,6 +424,13 @@ public class MainActivity extends AppCompatActivity {
                 } finally {
                     stream.flush();
                     stream.close();
+                    AlertDialog dialog = new AlertDialog.Builder(this)
+                            .setMessage("Your data has been downloaded successfully.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            })
+                            .create();
+                    dialog.show();
                 }
             }catch (Exception e)
             {
