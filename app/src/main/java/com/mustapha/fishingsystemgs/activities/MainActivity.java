@@ -7,8 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -36,11 +40,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -357,15 +363,35 @@ public class MainActivity extends AppCompatActivity {
             }
             data.append("\n\n");
         }
+
         try {
-            File path = this.getFilesDir();
-            File file = new File(path, "fsgs.txt");
-            FileOutputStream stream = new FileOutputStream(file);
-            try {
-                stream.write(data.toString().getBytes());
-            } finally {
-                stream.close();
+            File dir = new File(Environment.getExternalStorageDirectory() +
+                    File.separator + Environment.DIRECTORY_DOWNLOADS);
+
+            if(Build.VERSION.SDK_INT >= 30)
+            {
+                dir = new File(this.getExternalCacheDir() + File.separator +
+                        getResources().getString(R.string.download_dir));
             }
+            String extension = "fsgs"  + ".txt";
+            if(!dir.exists())
+            {
+                dir.mkdirs();
+            }
+            try {
+                File file = new File(dir, extension);
+                FileOutputStream stream = new FileOutputStream(file);
+                try {
+                    stream.write(data.toString().getBytes());
+                } finally {
+                    stream.flush();
+                    stream.close();
+                }
+            }catch (Exception e)
+            {
+                Log.e("Bookview download err1", e.toString());
+            }
+
         } catch (Exception e) {
 
         }

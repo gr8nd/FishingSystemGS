@@ -17,4 +17,5 @@
     <string name="share_data">Share data</string>
     <string name="view_tss">View TS</string>
     <string name="delete">Delete</string>
+    <string name="download_dir">FishingSystemGS</string>
 </resources>
