@@ -38,7 +38,7 @@
         android:layout_alignParentEnd="true"
         android:textStyle="bold"
         android:id="@+id/delete"
-        android:textColor="@color/black"
+        android:textColor="@color/purple_700"
         android:text="@string/delete"
         android:drawableTop="@drawable/baseline_delete_24"
         />
