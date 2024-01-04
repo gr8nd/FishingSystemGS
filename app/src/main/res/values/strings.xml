@@ -5,11 +5,16 @@
     <string name="add_mother">Add PGR</string>
     <string name="add">Add</string>
     <string name="third_decimal">PGR</string>
-    <string name="view_pgr">View PGRs</string>
+    <string name="view_pgr">View PGR</string>
     <string name="pgr_count">PGR Counter</string>
     <string name="ts_count">TS Counter</string>
     <string name="add_ts">Add TS</string>
     <string name="ts_name">Type TS Name (Decimal of this PGR is appended to the end automatically)</string>
     <string name="ts">TS</string>
     <string name="add_ts_to">Add TS to this PGR</string>
+    <string name="shareWith">Share using</string>
+    <string name="download">Download Data</string>
+    <string name="share_data">Share data</string>
+    <string name="view_tss">View TS</string>
+    <string name="delete">Delete</string>
 </resources>

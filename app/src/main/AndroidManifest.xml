@@ -12,9 +12,13 @@
         android:theme="@style/Theme.FishingSystemGS"
         tools:targetApi="31">
         <activity
-            android:name=".activities.ViewPGRActivity"
-            android:label="@string/add_ts"
+            android:name=".activities.ViewTSActivity"
+            android:label="@string/view_tss"
             android:exported="false" />
+        <activity
+            android:name=".activities.ViewPGRActivity"
+            android:exported="false"
+            android:label="@string/view_pgr" />
         <activity
             android:name=".activities.MainActivity"
             android:exported="true">

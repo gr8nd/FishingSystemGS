@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mustapha.fishingsystemgs.activities.MainActivity;
 import com.mustapha.fishingsystemgs.classes.PGR;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.classes.TS;
+import com.mustapha.fishingsystemgs.databases.PGRDatabase;
 import com.mustapha.fishingsystemgs.databases.TSDatabase;
 
 
@@ -55,6 +57,22 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
             holder.relativeLayout.setVisibility(View.VISIBLE);
         });
 
+        holder.delete.setOnClickListener(view -> {
+
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setMessage("Do you really want to delete this PGR?")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", (dialogInterface, i) -> {
+                        pgrs.remove(position);
+                        PGRDatabase pgrDb = new PGRDatabase(context,
+                                "pgrs.db", null, 1);
+                        pgrDb.delete(pgr.getDna());
+                        notifyDataSetChanged();
+                    })
+                    .create();
+            dialog.show();
+        });
+
         holder.tsNameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -79,7 +97,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
             try {
                 holder.relativeLayout.setVisibility(View.GONE);
                 holder.addTs.setVisibility(View.VISIBLE);
-                String s1 = holder.tsNameEdit.getText().toString();
+                String s1 = holder.tsNameEdit.getText().toString().replace(" ", "");
                 if(s1.isEmpty())
                 {
                     AlertDialog dialog = new AlertDialog.Builder(context)
@@ -141,6 +159,8 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         private final RelativeLayout relativeLayout;
         private EditText tsNameEdit;
 
+        private TextView delete;
+
         ViewHolder(View view) {
             super(view);
 
@@ -148,6 +168,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
             addTs =view.findViewById(R.id.add_ts);
             number = view.findViewById(R.id.number);
             add = view.findViewById(R.id.add);
+            delete = view.findViewById(R.id.delete);
             relativeLayout = view.findViewById(R.id.house1);
             tsNameEdit = view.findViewById(R.id.tsNameEdit);
             ts = view.findViewById(R.id.ts);

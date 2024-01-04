@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -81,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
         addBtn.setOnClickListener(view -> {
             try {
-                String s1 = firstDecimal.getText().toString();
-                String s2 = secondDecimal.getText().toString();
+                String s1 = firstDecimal.getText().toString().replace(" ", "");
+                String s2 = secondDecimal.getText().toString().replace(" ", "");
                 double firstDecimalNum = Double.parseDouble(s1);
                 double secondDecimalNum = Double.parseDouble(s2);
                 double thirdDecimalNum = firstDecimalNum - secondDecimalNum;
@@ -170,7 +172,8 @@ public class MainActivity extends AppCompatActivity {
         String dna = null;
         for (PGR pgr : this.pgrList) {
             String name = pgr.getName();
-            if (name.equals(query)) {
+            String s = pgr.getFirstDecimalNumber() + "-" +pgr.getSecondDecimalNumber();
+            if (query.equals(name) || query.equals(s)) {
                 pgrSearched.setText(name);
                 dna = pgr.getDna();
                 break;
@@ -223,9 +226,43 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        onBackPressed();
+        int id = item.getItemId();
+        if (id == R.id.download_data) {
+            download();
+            return true;
+        } else if (id == R.id.share_data) {
+            share("");
+            return true;
+        } else {
+            onBackPressed();
+            return true;
+        }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+    private void share(String data) {
+        try {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, data);
+            Intent intent = Intent.createChooser(shareIntent, getResources().getString(R.string.shareWith));
+            startActivity(intent);
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void download() {
+        try {
+            //TODO
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
