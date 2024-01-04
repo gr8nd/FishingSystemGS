@@ -199,7 +199,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/searchView"
+        android:layout_marginTop="20dp"
         android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
         android:textStyle="bold"
         android:textColor="@color/purple_700"
         android:id="@+id/pgr_searched"/>

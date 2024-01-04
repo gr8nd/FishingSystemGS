@@ -19,6 +19,8 @@ import com.mustapha.fishingsystemgs.classes.PGR;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.classes.TS;
 import com.mustapha.fishingsystemgs.databases.TSDatabase;
@@ -91,7 +93,8 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                     String s2 = s1 + " " + pgr.getThirdDecimalNumber();
                     TSDatabase tsDb = new TSDatabase(context,
                             "tss.db", null, 1);
-                    TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna());
+                    String id = UUID.randomUUID().toString();
+                    TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna(), id);
                     tsDb.insert(ts);
                     AlertDialog dialog = new AlertDialog.Builder(context)
                             .setTitle("Stored")

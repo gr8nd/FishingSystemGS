@@ -20,6 +20,8 @@ public class TSDatabase extends SQLiteOpenHelper {
     public static final String TAG = "TS Tag";
     private static final String TS_TABLE_NAME = "ts";
     private static final String COLUMN_TS_ID = "id";
+
+    private static final String COLUMN_TS_PGR_DNA = "dna";
     private static final String COLUMN_THIRD_DECIMAL_NUMBER = "thirddecimal";
     private static final String COLUMN_TS_NAME = "tsname";
 
@@ -30,7 +32,7 @@ public class TSDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TS_TABLE_NAME + "(id TEXT PRIMARY KEY, thirddecimal TEXT, tsname TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TS_TABLE_NAME + "(id TEXT PRIMARY KEY, dna TEXT, thirddecimal TEXT, tsname TEXT)");
 
     }
 
@@ -44,7 +46,8 @@ public class TSDatabase extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            values.put(COLUMN_TS_ID, ts.getDnaOfMother());
+            values.put(COLUMN_TS_ID, ts.getId());
+            values.put(COLUMN_TS_PGR_DNA, ts.getDnaOfMother());
             values.put(COLUMN_THIRD_DECIMAL_NUMBER, ts.getThirdDecimalOfMother());
             values.put(COLUMN_TS_NAME, ts.getName());
 
@@ -88,7 +91,8 @@ public class TSDatabase extends SQLiteOpenHelper {
             if (cursor.getCount() >= 0) {
                 TS ts = new TS();
 
-                ts.setDnaOfMother(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_ID)));
+                ts.setId(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_ID)));
+                ts.setDnaOfMother(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_PGR_DNA)));
                 ts.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_NAME)));
                 ts.setThirdDecimalOfMother(Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_THIRD_DECIMAL_NUMBER))));
 
