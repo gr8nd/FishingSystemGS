@@ -13,7 +13,7 @@
         tools:targetApi="31">
         <activity
             android:name=".activities.ViewPGRActivity"
-            android:label="@string/view_pgr"
+            android:label="@string/add_ts"
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"

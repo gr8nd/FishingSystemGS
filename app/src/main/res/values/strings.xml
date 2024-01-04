@@ -11,4 +11,5 @@
     <string name="add_ts">Add TS</string>
     <string name="ts_name">Type TS Name (Decimal is appended to the end automatically)</string>
     <string name="ts">TS</string>
+    <string name="add_ts_to">Add TS to this PGR</string>
 </resources>

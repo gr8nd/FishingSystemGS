@@ -83,7 +83,6 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                 if(s1.isEmpty())
                 {
                     AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setTitle("Error Occurred")
                             .setMessage("Please type the TS name and click on the Add button.")
                             .setCancelable(true)
                             .setPositiveButton("Ok", (dialogInterface, i) -> {
@@ -98,7 +97,6 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                     TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna(), id);
                     tsDb.insert(ts);
                     AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setTitle("Stored")
                             .setMessage("Your new TS has been successfully stored.")
                             .setCancelable(true)
                             .setPositiveButton("Ok", (dialogInterface, i) -> {

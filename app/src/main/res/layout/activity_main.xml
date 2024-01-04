@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/view_pgr"
         android:textAllCaps="false"
-        android:text="@string/view_pgr"
+        android:text="@string/add_ts"
         android:textStyle="bold"
         android:textSize="20sp"
         android:typeface="sans"

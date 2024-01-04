@@ -112,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
                 String dna = UUID.randomUUID().toString();
                 PGR pgr = new PGR(name, firstDecimalNum, secondDecimalNum, thirdDecimalNum, dna);
                 pgrDb.insert(pgr);
-                displayAlert("Your new PGR has been successfully stored.", "Stored");
+                displayAlert("Your new PGR has been successfully stored.");
             }catch (Exception ignored)
             {
-                displayAlert("Please type First Decimal first, then type the Second Decimal and then click on the Add button.", "Error Occurred");
+                displayAlert("Please type First Decimal first, then type the Second Decimal and then click on the Add button.");
             }
             relativeLayout.setVisibility(View.GONE);
             addPGRBtn.setVisibility(View.VISIBLE);
@@ -220,10 +220,9 @@ public class MainActivity extends AppCompatActivity {
         return tsList;
     }
 
-    private void displayAlert(@Nullable String message, String title) {
+    private void displayAlert(@Nullable String message) {
         runOnUiThread(() -> {
             AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle(title)
                     .setMessage(message)
                     .setCancelable(true)
                     .setPositiveButton("Ok", (dialogInterface, i) -> {
