@@ -35,6 +35,9 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     private List<PGR> pgrList;
     private List<TS> list;
+
+    private PGRDatabase pgrDb;
+
     private RelativeLayout relativeLayout;
     private Button addPGRBtn;
     private TextView pgrSearched;
@@ -48,29 +51,6 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        list = new ArrayList<>();
-        pgrList = new ArrayList<>();
-
-        pgrSearched = findViewById(R.id.pgr_searched);
-
-        PGRDatabase pgrDb = new PGRDatabase(MainActivity.this,
-                "pgrs.db", null, 1);
-        List<PGR> pgrs = pgrDb.getPGRs();
-
-        TSDatabase tsDb = new TSDatabase(MainActivity.this,
-                "tss.db", null, 1);
-        List<TS> ts = tsDb.getTss();
-
-        TextView pgrCounter = findViewById(R.id.pgr_count);
-        TextView tsCounter = findViewById(R.id.ts_count);
-        String pc = getResources().getString(R.string.pgr_count) + ": " + pgrDb.count();
-        pgrCounter.setText(pc);
-        String tc = getResources().getString(R.string.ts_count) + ": " + tsDb.count();
-        tsCounter.setText(tc);
-
-        pgrList.addAll(pgrs);
-        list.addAll(ts);
 
         Button viewPGRBtn = findViewById(R.id.view_pgr);
         addPGRBtn = findViewById(R.id.add_mother);
@@ -226,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
                     .setMessage(message)
                     .setCancelable(true)
                     .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        recreate();
                     })
                     .create();
             dialog.show();
@@ -245,5 +226,33 @@ public class MainActivity extends AppCompatActivity {
         onBackPressed();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        list = new ArrayList<>();
+        pgrList = new ArrayList<>();
+
+        pgrSearched = findViewById(R.id.pgr_searched);
+
+        pgrDb = new PGRDatabase(MainActivity.this,
+                "pgrs.db", null, 1);
+        List<PGR> pgrs = pgrDb.getPGRs();
+
+        TSDatabase tsDb = new TSDatabase(MainActivity.this,
+                "tss.db", null, 1);
+        List<TS> ts = tsDb.getTss();
+
+        TextView pgrCounter = findViewById(R.id.pgr_count);
+        TextView tsCounter = findViewById(R.id.ts_count);
+        String pc = getResources().getString(R.string.pgr_count) + ": " + pgrDb.count();
+        pgrCounter.setText(pc);
+        String tc = getResources().getString(R.string.ts_count) + ": " + tsDb.count();
+        tsCounter.setText(tc);
+
+        pgrList.addAll(pgrs);
+        list.addAll(ts);
+
+        super.onResume();
     }
 }
