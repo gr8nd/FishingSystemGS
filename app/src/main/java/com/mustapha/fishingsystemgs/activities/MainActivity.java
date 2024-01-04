@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.adapters.SearchedResultsAdapter;
@@ -33,7 +34,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-    private List<Object> objects;
+    private List<PGR> pgrList;
+    private List<TS> list;
     private RelativeLayout relativeLayout;
     private Button addPGRBtn;
     private TextView pgrSearched;
@@ -48,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        objects = new ArrayList<>();
+        list = new ArrayList<>();
+        pgrList = new ArrayList<>();
 
         pgrSearched = findViewById(R.id.pgr_searched);
 
@@ -67,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
         String tc = getResources().getString(R.string.ts_count) + ": " + tsDb.count();
         tsCounter.setText(tc);
 
-        objects.addAll(pgrs);
-        objects.addAll(ts);
+        pgrList.addAll(pgrs);
+        list.addAll(ts);
 
         Button viewPGRBtn = findViewById(R.id.view_pgr);
         addPGRBtn = findViewById(R.id.add_mother);
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         Button addBtn = findViewById(R.id.add);
         SearchView searchView = findViewById(R.id.searchView);
 
-        SearchedResultsAdapter adapter = new SearchedResultsAdapter(this);
+        SearchedResultsAdapter adapter = new SearchedResultsAdapter();
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
@@ -153,9 +156,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 if (s.trim().length() > 0) {
-                    List<Object> filteredChatList = filter(s);
-                    if (!filteredChatList.isEmpty()) {
-                        adapter.filter(filteredChatList);
+                    List<TS> filteredList = filterTS(s);
+                    if (!filteredList.isEmpty()) {
+                        adapter.setTsList(filteredList);
+                    }else
+                    {
+                        List<TS> filteredList2 = filterPGR(s);
+                        adapter.setTsList(filteredList2);
                     }
                 }
                 return true;
@@ -163,41 +170,57 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if (s.trim().length() > 0) {
+                    List<TS> filteredList = filterTS(s);
+                    if (!filteredList.isEmpty()) {
+                        adapter.setTsList(filteredList);
+                    }else
+                    {
+                        List<TS> filteredList2 = filterPGR(s);
+                        adapter.setTsList(filteredList2);
+                    }
+                }
                 return true;
             }
         });
     }
 
-    private List<Object> filter(String query) {
-        query = query.toLowerCase().trim();
-        List<Object> objectArrayList = new ArrayList<>();
-        for (Object object : this.objects) {
-            if (object instanceof PGR) {
-                PGR pgr = (PGR) object;
-                String name = pgr.getName().toLowerCase();
+    private List<TS> filterPGR(String query) {
+        query = query.trim();
+        List<TS> tsList = new ArrayList<>();
+        String dna = null;
+        for (PGR pgr : this.pgrList) {
+            String name = pgr.getName();
+            if (name.equals(query)) {
                 pgrSearched.setText(name);
-                if (name.equals(query)) {
-                    for(Object o: this.objects)
-                    {
-                        if(o instanceof TS)
-                        {
-                            TS ts = (TS) o;
-                            if(ts.getDnaOfMother().equals(pgr.getDna()))
-                            {
-                                objectArrayList.add(ts);
-                            }
-                        }
-                    }
-                }
-            } else if (object instanceof TS) {
-                TS ts = (TS) object;
-                String name = ts.getName().toLowerCase();
-                if (name.equals(query)) {
-                    objectArrayList.add(object);
-                }
+                dna = pgr.getDna();
+                break;
             }
         }
-        return objectArrayList;
+
+        for (TS ts : this.list) {
+            String name = ts.getDnaOfMother();
+            if (name.equals(dna)) {
+                tsList.add(ts);
+            }
+        }
+
+        //Toast.makeText(this, "TS: " + tsList.size(), Toast.LENGTH_LONG).show();
+
+        return tsList;
+    }
+
+    private List<TS> filterTS(String query) {
+        query = query.trim();
+        List<TS> tsList = new ArrayList<>();
+        for (TS ts : this.list) {
+            String name = ts.getName();
+            if (name.equals(query)) {
+                tsList.add(ts);
+            }
+        }
+
+        return tsList;
     }
 
     private void displayAlert(@Nullable String message, String title) {

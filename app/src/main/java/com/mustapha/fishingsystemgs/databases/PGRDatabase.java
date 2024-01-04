@@ -47,7 +47,7 @@ public class PGRDatabase extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            values.put(COLUMN_PGR_ID, String.valueOf(PGR.getDna()));
+            values.put(COLUMN_PGR_ID, PGR.getDna());
             values.put(COLUMN_PGR_NAME, PGR.getName());
             values.put(COLUMN_FIRST_DECIMAL_NUMBER, PGR.getFirstDecimalNumber());
             values.put(COLUMN_SECOND_DECIMAL_NUMBER, PGR.getSecondDecimalNumber());

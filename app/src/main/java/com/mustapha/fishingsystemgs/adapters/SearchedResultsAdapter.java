@@ -1,13 +1,11 @@
 package com.mustapha.fishingsystemgs.adapters;
 
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.mustapha.fishingsystemgs.R;
-import com.mustapha.fishingsystemgs.classes.PGR;
 import com.mustapha.fishingsystemgs.classes.TS;
 
 import androidx.annotation.NonNull;
@@ -18,12 +16,10 @@ import java.util.List;
 
 
 public class SearchedResultsAdapter extends RecyclerView.Adapter<SearchedResultsAdapter.ViewHolder> {
-    private final Context context;
-    private List<Object> objects;
+    private List<TS> tsList;
 
-    public SearchedResultsAdapter(Context context) {
-        this.context = context;
-        this.objects = new ArrayList<>();
+    public SearchedResultsAdapter() {
+        this.tsList = new ArrayList<>();
     }
 
     @NonNull
@@ -36,31 +32,23 @@ public class SearchedResultsAdapter extends RecyclerView.Adapter<SearchedResults
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        Object o = objects.get(position);
-        if(o instanceof PGR)
-        {
-            PGR pgr = (PGR) o;
-            holder.name.setText(pgr.getName());
-        }else if(o instanceof TS)
-        {
-            TS ts = (TS) o;
-            holder.name.setText(ts.getName());
-        }
+        TS ts = tsList.get(position);
+        holder.name.setText(ts.getName());
 
     }
 
     @Override
     public int getItemCount() {
-        return objects.size();
+        return tsList.size();
     }
 
-    public void setObjects(List<Object> objects) {
-        this.objects = objects;
+    public void setTsList(List<TS> tsList) {
+        this.tsList.addAll(tsList);
         notifyDataSetChanged();
     }
 
-    public void filter(List<Object> objects) {
-        this.objects = new ArrayList<>(objects);
+    public void filter(List<TS> tsList) {
+        this.tsList = new ArrayList<>(tsList);
         notifyDataSetChanged();
     }
 

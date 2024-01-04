@@ -137,7 +137,8 @@ public class TSDatabase extends SQLiteOpenHelper {
                 do {
                     TS ts = new TS();
 
-                    ts.setDnaOfMother(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_ID)));
+                    ts.setDnaOfMother(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_PGR_DNA)));
+                    ts.setId(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_ID)));
                     ts.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_NAME)));
                     ts.setThirdDecimalOfMother(Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_THIRD_DECIMAL_NUMBER))));
 
