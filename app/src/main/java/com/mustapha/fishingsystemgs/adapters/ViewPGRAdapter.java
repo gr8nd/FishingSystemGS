@@ -94,7 +94,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                     TSDatabase tsDb = new TSDatabase(context,
                             "tss.db", null, 1);
                     String id = UUID.randomUUID().toString();
-                    TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna(), id);
+                    TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna(), id, s1);
                     tsDb.insert(ts);
                     AlertDialog dialog = new AlertDialog.Builder(context)
                             .setMessage("Your new TS has been successfully stored.")

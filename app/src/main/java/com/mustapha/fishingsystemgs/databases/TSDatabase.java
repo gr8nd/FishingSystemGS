@@ -25,6 +25,8 @@ public class TSDatabase extends SQLiteOpenHelper {
     private static final String COLUMN_THIRD_DECIMAL_NUMBER = "thirddecimal";
     private static final String COLUMN_TS_NAME = "tsname";
 
+    private static final String COLUMN_NAME = "name";
+
     public TSDatabase(@Nullable Context context, @Nullable String name,
                       @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -32,7 +34,7 @@ public class TSDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TS_TABLE_NAME + "(id TEXT PRIMARY KEY, dna TEXT, thirddecimal TEXT, tsname TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TS_TABLE_NAME + "(id TEXT PRIMARY KEY, name TEXT, dna TEXT, thirddecimal TEXT, tsname TEXT)");
 
     }
 
@@ -49,7 +51,8 @@ public class TSDatabase extends SQLiteOpenHelper {
             values.put(COLUMN_TS_ID, ts.getId());
             values.put(COLUMN_TS_PGR_DNA, ts.getDnaOfMother());
             values.put(COLUMN_THIRD_DECIMAL_NUMBER, ts.getThirdDecimalOfMother());
-            values.put(COLUMN_TS_NAME, ts.getName());
+            values.put(COLUMN_NAME, ts.getName());
+            values.put(COLUMN_TS_NAME, ts.getTsName());
 
 
             db.insert(TS_TABLE_NAME, null, values);
@@ -93,7 +96,8 @@ public class TSDatabase extends SQLiteOpenHelper {
 
                 ts.setId(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_ID)));
                 ts.setDnaOfMother(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_PGR_DNA)));
-                ts.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_NAME)));
+                ts.setTsName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_NAME)));
+                ts.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)));
                 ts.setThirdDecimalOfMother(Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_THIRD_DECIMAL_NUMBER))));
 
                 cursor.close();
@@ -139,7 +143,8 @@ public class TSDatabase extends SQLiteOpenHelper {
 
                     ts.setDnaOfMother(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_PGR_DNA)));
                     ts.setId(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_ID)));
-                    ts.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_NAME)));
+                    ts.setTsName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TS_NAME)));
+                    ts.setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)));
                     ts.setThirdDecimalOfMother(Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_THIRD_DECIMAL_NUMBER))));
 
                     tss.add(ts);

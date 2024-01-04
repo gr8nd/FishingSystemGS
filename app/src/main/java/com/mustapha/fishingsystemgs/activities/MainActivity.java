@@ -211,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
         query = query.trim();
         List<TS> tsList = new ArrayList<>();
         for (TS ts : this.list) {
-            String name = ts.getName();
-            if (name.equals(query)) {
+            if (query.equals(ts.getName()) ||
+                    query.equals(ts.getTsName())) {
                 tsList.add(ts);
             }
         }

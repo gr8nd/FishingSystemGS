@@ -1,19 +1,22 @@
 package com.mustapha.fishingsystemgs.classes;
 
 public class TS {
-    private String name;
+    private String name; //name formed by appending third decimal of PGR to the end
+    //TS name
     private double thirdDecimalOfMother;
     private String dnaOfMother;
 
     private String id;
+    private String tsName; //name of the TS
     public TS() {
     }
 
-    public TS(String name, double thirdDecimalOfMother, String dnaOfMother, String id) {
+    public TS(String name, double thirdDecimalOfMother, String dnaOfMother, String id, String tsName) {
         this.name = name;
         this.thirdDecimalOfMother = thirdDecimalOfMother;
         this.dnaOfMother = dnaOfMother;
         this.id = id;
+        this.tsName = tsName;
     }
 
     public String getName() {
@@ -46,5 +49,13 @@ public class TS {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getTsName() {
+        return tsName;
+    }
+
+    public void setTsName(String tsName) {
+        this.tsName = tsName;
     }
 }
