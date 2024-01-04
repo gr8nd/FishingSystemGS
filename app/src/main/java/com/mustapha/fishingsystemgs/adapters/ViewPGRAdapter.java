@@ -67,7 +67,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                         PGRDatabase pgrDb = new PGRDatabase(context,
                                 "pgrs.db", null, 1);
                         pgrDb.delete(pgr.getDna());
-                        notifyDataSetChanged();
+                        notifyItemRemoved(position);
                     })
                     .create();
             dialog.show();

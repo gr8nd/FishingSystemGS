@@ -53,7 +53,7 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
                         TSDatabase tsDb = new TSDatabase(context,
                                 "tss.db", null, 1);
                         tsDb.delete(ts.getId());
-                        notifyDataSetChanged();
+                        notifyItemRemoved(position);
                     })
                     .create();
             dialog.show();
