@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
                     data.append(ts.getName()).append("\n");
                 }
             }
-            data.append("\n|n");
+            data.append("\n\n");
         }
         try {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
                     data.append(ts.getName()).append("\n");
                 }
             }
-            data.append("\n|n");
+            data.append("\n\n");
         }
         try {
             File path = this.getFilesDir();
