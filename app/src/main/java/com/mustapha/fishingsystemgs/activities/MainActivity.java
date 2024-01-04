@@ -35,6 +35,7 @@ import com.mustapha.fishingsystemgs.databases.TSDatabase;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -252,9 +253,25 @@ public class MainActivity extends AppCompatActivity {
             download();
             return true;
         } else if (id == R.id.share_data) {
-            share();
+            StringBuilder data = new StringBuilder();
+            for(PGR pgr: pgrList)
+            {
+                data.append(pgr.getName()).append("\n\n");
+                for(TS ts: list)
+                {
+                    if(ts.getDnaOfMother().equals(pgr.getDna()))
+                    {
+                        data.append(ts.getName()).append("\n");
+                    }
+                }
+                data.append("\n\n");
+            }
+            share(data.toString());
             return true;
-        } else {
+        } else if(id == R.id.upload_data){
+            uploadData();
+            return true;
+        }else{
             onBackPressed();
             return true;
         }
@@ -322,21 +339,8 @@ public class MainActivity extends AppCompatActivity {
         return ret;
     }
 
-    private void share() {
+    private void share(String data) {
 
-        StringBuilder data = new StringBuilder();
-        for(PGR pgr: pgrList)
-        {
-            data.append(pgr.getName()).append("\n\n");
-            for(TS ts: list)
-            {
-                if(ts.getDnaOfMother().equals(pgr.getDna()))
-                {
-                    data.append(ts.getName()).append("\n");
-                }
-            }
-            data.append("\n\n");
-        }
         try {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
@@ -345,6 +349,41 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         } catch (Exception e) {
 
+        }
+    }
+
+    private void uploadData()
+    {
+        File dir = new File(Environment.getExternalStorageDirectory() +
+                File.separator + Environment.DIRECTORY_DOWNLOADS);
+
+        if(Build.VERSION.SDK_INT >= 30)
+        {
+            dir = new File(this.getExternalCacheDir() + File.separator +
+                    getResources().getString(R.string.download_dir));
+        }
+        String extension = "fsgs"  + ".txt";
+        if(!dir.exists())
+        {
+            dir.mkdirs();
+        }
+        File file = new File(dir, extension);
+        try {
+            int length = (int) file.length();
+
+            byte[] bytes = new byte[length];
+
+            FileInputStream in = new FileInputStream(file);
+            try {
+                in.read(bytes);
+            } finally {
+                in.close();
+            }
+            String contents = new String(bytes);
+            share(contents);
+        }catch (Exception e)
+        {
+            Log.e("Upload error", e.toString());
         }
     }
 
@@ -364,7 +403,6 @@ public class MainActivity extends AppCompatActivity {
             data.append("\n\n");
         }
 
-        try {
             File dir = new File(Environment.getExternalStorageDirectory() +
                     File.separator + Environment.DIRECTORY_DOWNLOADS);
 
@@ -389,12 +427,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }catch (Exception e)
             {
-                Log.e("Bookview download err1", e.toString());
+                Log.e("Download error", e.toString());
             }
-
-        } catch (Exception e) {
-
-        }
     }
 
     @Override
