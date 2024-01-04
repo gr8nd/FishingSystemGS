@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,6 +29,14 @@ import com.mustapha.fishingsystemgs.classes.TS;
 import com.mustapha.fishingsystemgs.databases.PGRDatabase;
 import com.mustapha.fishingsystemgs.databases.TSDatabase;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -237,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
             download();
             return true;
         } else if (id == R.id.share_data) {
-            share("");
+            share();
             return true;
         } else {
             onBackPressed();
@@ -251,7 +260,51 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
-    private void share(String data) {
+
+    private void writeToFile(String data) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("fsgs.txt",
+                    this.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    private String readFromFile() {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = this.openFileInput("config.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
+    }
+
+    private void share() {
+        String data = "";
         try {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
@@ -264,8 +317,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void download() {
+
+        String data = "";
         try {
-            //TODO
+            File path = this.getFilesDir();
+            File file = new File(path, "fsgs.txt");
+            FileOutputStream stream = new FileOutputStream(file);
+            try {
+                stream.write(data.getBytes());
+            } finally {
+                stream.close();
+            }
         } catch (Exception e) {
 
         }
