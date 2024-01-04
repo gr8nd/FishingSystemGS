@@ -189,8 +189,8 @@
         android:layout_marginTop="10dp"
         android:id="@+id/searchView"
         android:layout_marginStart="20dp"
-        android:background="@drawable/rounded_corner1"
         android:layout_marginEnd="20dp"
+        android:background="@drawable/rounded_corner1"
         android:layout_below="@id/house1"
         android:queryHint="Search PGR or TS"
         android:iconifiedByDefault="false" />
