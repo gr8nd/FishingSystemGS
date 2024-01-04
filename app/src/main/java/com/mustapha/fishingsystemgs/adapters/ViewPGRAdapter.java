@@ -83,7 +83,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                 if(s1.isEmpty())
                 {
                     AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setMessage("Please type the TS name and click on the Add button.")
+                            .setMessage("Please first type the TS name and click on the Add button.")
                             .setCancelable(true)
                             .setPositiveButton("Ok", (dialogInterface, i) -> {
                             })
