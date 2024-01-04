@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.adapters.SearchedResultsAdapter;
@@ -173,34 +174,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void filterPGR(String query) {
-        List<Object> tsList = new ArrayList<>();
-        String dna = null;
-        for (PGR pgr : this.pgrList) {
-            String name = pgr.getName();
-            String s = pgr.getFirstDecimalNumber() + "-" +pgr.getSecondDecimalNumber();
-            if (query.contains(name) || query.contains(s)) {
-                pgrSearched.setText(name);
-                dna = pgr.getDna();
-                break;
-            }
-        }
-
-        for (TS ts : this.list) {
-            String name = ts.getDnaOfMother();
-            if (name.equals(dna)) {
-                tsList.add(ts);
-            }
-        }
-
-    }
-
     private void filterTS(String query) {
         List<Object> tsList = new ArrayList<>();
         for (TS ts : this.list) {
-            if (query.contains(ts.getName()) ||
-                    query.contains(ts.getTsName())) {
+            if (ts.getName().contains(query) ||
+                    ts.getTsName().contains(query)) {
                 tsList.add(ts);
+            }
+        }
+
+
+        for (PGR pgr : this.pgrList) {
+            String name = pgr.getName();
+            String s = pgr.getFirstDecimalNumber() + "-" +pgr.getSecondDecimalNumber();
+            if (name.contains(query) || s.contains(query)) {
+                pgrSearched.setText(name);
+                String dna = pgr.getDna();
+                for (TS ts : this.list) {
+                    String dnaOfMother = ts.getDnaOfMother();
+                    if (dnaOfMother.equals(dna)) {
+                        tsList.add(ts);
+                    }
+                }
             }
         }
 
