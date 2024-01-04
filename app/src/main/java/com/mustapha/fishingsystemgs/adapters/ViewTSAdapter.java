@@ -80,7 +80,7 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, number;
-        private final Button delete;
+        private final TextView delete;
 
         ViewHolder(View view) {
             super(view);

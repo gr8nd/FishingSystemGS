@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Button viewPGRBtn = findViewById(R.id.view_pgr);
+        Button viewTSBtn = findViewById(R.id.view_tss);
         addPGRBtn = findViewById(R.id.add_mother);
         relativeLayout = findViewById(R.id.house1);
         Button addBtn = findViewById(R.id.add);
@@ -73,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
         viewPGRBtn.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ViewPGRActivity.class);
+            startActivity(intent);
+        });
+
+        viewTSBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, ViewTSActivity.class);
             startActivity(intent);
         });
 
