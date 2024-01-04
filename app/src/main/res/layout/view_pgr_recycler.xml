@@ -87,7 +87,7 @@
                 android:maxLines="1"
                 android:visibility="visible"
                 android:backgroundTint="@color/white"
-                android:inputType="numberDecimal"
+                android:inputType="text"
                 android:textColor="@color/purple_700"
                 android:textColorHint="@color/black"
                 android:gravity="start|bottom"
