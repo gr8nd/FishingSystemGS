@@ -261,11 +261,24 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void writeToFile(String data) {
+    private void writeToFile() {
+        StringBuilder data = new StringBuilder();
+        for(PGR pgr: pgrList)
+        {
+            data.append(pgr.getName()).append("\n\n");
+            for(TS ts: list)
+            {
+                if(ts.getDnaOfMother().equals(pgr.getDna()))
+                {
+                    data.append(ts.getName()).append("\n");
+                }
+            }
+            data.append("\n|n");
+        }
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput("fsgs.txt",
                     this.MODE_PRIVATE));
-            outputStreamWriter.write(data);
+            outputStreamWriter.write(data.toString());
             outputStreamWriter.close();
         }
         catch (IOException e) {
@@ -304,11 +317,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void share() {
-        String data = "";
+
+        StringBuilder data = new StringBuilder();
+        for(PGR pgr: pgrList)
+        {
+            data.append(pgr.getName()).append("\n\n");
+            for(TS ts: list)
+            {
+                if(ts.getDnaOfMother().equals(pgr.getDna()))
+                {
+                    data.append(ts.getName()).append("\n");
+                }
+            }
+            data.append("\n|n");
+        }
         try {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, data);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, data.toString());
             Intent intent = Intent.createChooser(shareIntent, getResources().getString(R.string.shareWith));
             startActivity(intent);
         } catch (Exception e) {
@@ -318,13 +344,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void download() {
 
-        String data = "";
+        StringBuilder data = new StringBuilder();
+        for(PGR pgr: pgrList)
+        {
+            data.append(pgr.getName()).append("\n\n");
+            for(TS ts: list)
+            {
+                if(ts.getDnaOfMother().equals(pgr.getDna()))
+                {
+                    data.append(ts.getName()).append("\n");
+                }
+            }
+            data.append("\n|n");
+        }
         try {
             File path = this.getFilesDir();
             File file = new File(path, "fsgs.txt");
             FileOutputStream stream = new FileOutputStream(file);
             try {
-                stream.write(data.getBytes());
+                stream.write(data.toString().getBytes());
             } finally {
                 stream.close();
             }
