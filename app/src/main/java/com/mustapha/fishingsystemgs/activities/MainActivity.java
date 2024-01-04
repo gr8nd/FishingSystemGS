@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,13 +39,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout relativeLayout;
     private Button addPGRBtn;
     private TextView pgrSearched;
+    private SearchedResultsAdapter adapter;
+
+    private List<Object> objectList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +76,15 @@ public class MainActivity extends AppCompatActivity {
         Button addBtn = findViewById(R.id.add);
         SearchView searchView = findViewById(R.id.searchView);
 
-        SearchedResultsAdapter adapter = new SearchedResultsAdapter();
+        adapter = new SearchedResultsAdapter();
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+
+        objectList = new ArrayList<>();
+
 
         EditText firstDecimal = findViewById(R.id.firstDecimalEdit);
         EditText secondDecimal = findViewById(R.id.secondDecimalEdit);
@@ -157,45 +159,27 @@ public class MainActivity extends AppCompatActivity {
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
-                if (s.trim().length() > 0) {
-                    List<TS> filteredList = filterTS(s);
-                    if (!filteredList.isEmpty()) {
-                        adapter.setTsList(filteredList);
-                    }else
-                    {
-                        List<TS> filteredList2 = filterPGR(s);
-                        adapter.setTsList(filteredList2);
-                    }
-                }
+            public boolean onQueryTextSubmit(String query) {
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String s) {
-                if (s.trim().length() > 0) {
-                    List<TS> filteredList = filterTS(s);
-                    if (!filteredList.isEmpty()) {
-                        adapter.setTsList(filteredList);
-                    }else
-                    {
-                        List<TS> filteredList2 = filterPGR(s);
-                        adapter.setTsList(filteredList2);
-                    }
-                }
+            public boolean onQueryTextChange(String query) {
+                query = query.trim().replace(" ", "");
+                filterTS(query);
+
                 return true;
             }
         });
     }
 
-    private List<TS> filterPGR(String query) {
-        query = query.trim();
-        List<TS> tsList = new ArrayList<>();
+    private void filterPGR(String query) {
+        List<Object> tsList = new ArrayList<>();
         String dna = null;
         for (PGR pgr : this.pgrList) {
             String name = pgr.getName();
             String s = pgr.getFirstDecimalNumber() + "-" +pgr.getSecondDecimalNumber();
-            if (query.equals(name) || query.equals(s)) {
+            if (query.contains(name) || query.contains(s)) {
                 pgrSearched.setText(name);
                 dna = pgr.getDna();
                 break;
@@ -209,20 +193,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        return tsList;
     }
 
-    private List<TS> filterTS(String query) {
-        query = query.trim();
-        List<TS> tsList = new ArrayList<>();
+    private void filterTS(String query) {
+        List<Object> tsList = new ArrayList<>();
         for (TS ts : this.list) {
-            if (query.equals(ts.getName()) ||
-                    query.equals(ts.getTsName())) {
+            if (query.contains(ts.getName()) ||
+                    query.contains(ts.getTsName())) {
                 tsList.add(ts);
             }
         }
 
-        return tsList;
+        adapter.updateList(tsList);
     }
 
     private void displayAlert(@Nullable String message) {
@@ -462,6 +444,11 @@ public class MainActivity extends AppCompatActivity {
 
         pgrList.addAll(pgrs);
         list.addAll(ts);
+
+        objectList.addAll(pgrList);
+        objectList.addAll(list);
+
+        adapter.setObjectList(objectList);
 
         super.onResume();
     }

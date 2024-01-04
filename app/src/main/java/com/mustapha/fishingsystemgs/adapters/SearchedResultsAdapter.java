@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.mustapha.fishingsystemgs.R;
+import com.mustapha.fishingsystemgs.classes.PGR;
 import com.mustapha.fishingsystemgs.classes.TS;
 
 import androidx.annotation.NonNull;
@@ -16,10 +17,10 @@ import java.util.List;
 
 
 public class SearchedResultsAdapter extends RecyclerView.Adapter<SearchedResultsAdapter.ViewHolder> {
-    private List<TS> tsList;
+    private List<Object> objectList;
 
     public SearchedResultsAdapter() {
-        this.tsList = new ArrayList<>();
+        this.objectList = new ArrayList<>();
     }
 
     @NonNull
@@ -32,23 +33,32 @@ public class SearchedResultsAdapter extends RecyclerView.Adapter<SearchedResults
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        TS ts = tsList.get(position);
-        holder.name.setText(ts.getName());
+        Object o = objectList.get(position);
+        if(o instanceof TS)
+        {
+            TS ts = (TS) o;
+            holder.name.setText(ts.getName());
+        }else if(o instanceof PGR)
+        {
+            PGR pgr = (PGR) o;
+            holder.name.setText(pgr.getName());
+        }
+
 
     }
 
     @Override
     public int getItemCount() {
-        return tsList.size();
+        return objectList.size();
     }
 
-    public void setTsList(List<TS> tsList) {
-        this.tsList.addAll(tsList);
+    public void setObjectList(List<Object> objectList) {
+        this.objectList.addAll(objectList);
         notifyDataSetChanged();
     }
 
-    public void filter(List<TS> tsList) {
-        this.tsList = new ArrayList<>(tsList);
+    public void updateList(List<Object> tsList){
+        this.objectList = tsList;
         notifyDataSetChanged();
     }
 

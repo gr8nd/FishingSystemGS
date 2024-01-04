@@ -18,6 +18,6 @@
         android:id="@+id/share_data"
         android:icon="@drawable/baseline_share_24"
         android:title="@string/share_data"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
 </menu>
