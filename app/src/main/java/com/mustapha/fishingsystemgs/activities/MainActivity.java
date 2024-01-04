@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 PGR pgr = (PGR) object;
                 String name = pgr.getName().toLowerCase();
                 pgrSearched.setText(name);
-                if (name.contains(query)) {
+                if (name.equals(query)) {
                     for(Object o: this.objects)
                     {
                         if(o instanceof TS)
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (object instanceof TS) {
                 TS ts = (TS) object;
                 String name = ts.getName().toLowerCase();
-                if (name.contains(query)) {
+                if (name.equals(query)) {
                     objectArrayList.add(object);
                 }
             }

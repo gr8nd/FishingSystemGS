@@ -53,25 +53,26 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         holder.addTs.setOnClickListener(view -> {
             holder.addTs.setVisibility(View.GONE);
             holder.relativeLayout.setVisibility(View.VISIBLE);
-            holder.tsNameEdit.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        });
 
-                }
+        holder.tsNameEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
-                }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    String s1 = holder.tsNameEdit.getText().toString();
-                    String s2 = context.getResources().getString(R.string.ts) + " = " +
-                            s1 + " " + pgr.getThirdDecimalNumber();
-                    holder.ts.setText(s2);
-                }
-            });
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String s1 = holder.tsNameEdit.getText().toString();
+                String s2 = context.getResources().getString(R.string.ts) + " = " +
+                        s1 + " " + pgr.getThirdDecimalNumber();
+                holder.ts.setText(s2);
+            }
         });
 
         holder.add.setOnClickListener(view -> {
