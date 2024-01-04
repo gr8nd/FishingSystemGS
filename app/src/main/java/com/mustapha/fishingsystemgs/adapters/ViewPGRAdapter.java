@@ -108,8 +108,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
             }catch (Exception ignored)
             {
                 AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setTitle("Error Occurred")
-                        .setMessage("Please type the TS name and click on the Add button.")
+                        .setMessage("Please first type the TS name and click on the Add button.")
                         .setCancelable(true)
                         .setPositiveButton("Ok", (dialogInterface, i) -> {
                         })
