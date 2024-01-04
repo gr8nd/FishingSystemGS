@@ -445,6 +445,7 @@ public class MainActivity extends AppCompatActivity {
         pgrList.addAll(pgrs);
         list.addAll(ts);
 
+        objectList.clear();
         objectList.addAll(pgrList);
         objectList.addAll(list);
 
