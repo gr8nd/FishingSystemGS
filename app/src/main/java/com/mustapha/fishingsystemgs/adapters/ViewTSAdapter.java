@@ -17,12 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.classes.TS;
-import com.mustapha.fishingsystemgs.databases.PGRDatabase;
 import com.mustapha.fishingsystemgs.databases.TSDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder> {
     private final Context context;

@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mustapha.fishingsystemgs.activities.MainActivity;
 import com.mustapha.fishingsystemgs.classes.PGR;
 
 import java.math.RoundingMode;
