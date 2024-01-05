@@ -8,19 +8,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.adapters.ViewPGRAdapter;
 import com.mustapha.fishingsystemgs.classes.PGR;
 
+import com.mustapha.fishingsystemgs.classes.TS;
 import com.mustapha.fishingsystemgs.databases.PGRDatabase;
+import com.mustapha.fishingsystemgs.databases.TSDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPGRActivity extends AppCompatActivity {
-private List<PGR> pgrs;
-private ViewPGRAdapter adapter;
+    private List<PGR> pgrs;
+    private List<TS> tsList;
+    private ViewPGRAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,10 @@ private ViewPGRAdapter adapter;
         PGRDatabase pgrDb = new PGRDatabase(ViewPGRActivity.this,
                 "pgrs.db", null, 1);
         pgrs = pgrDb.getPGRs();
+
+        TSDatabase tsDatabase = new TSDatabase(ViewPGRActivity.this,
+                "tss.db", null, 1);
+        tsList = tsDatabase.getTss();
 
         adapter = new ViewPGRAdapter(this);
         adapter.setPGR(pgrs);
@@ -83,6 +91,18 @@ private ViewPGRAdapter adapter;
                 pgrList.add(pgr);
             }
         }
+
+        for (TS ts : this.tsList) {
+            if (ts.getName().contains(query) ||
+                    ts.getTsName().contains(query)) {
+                for (PGR pgr : this.pgrs) {
+                    if (pgr.getDna().contains(ts.getDnaOfMother())) {
+                        pgrList.add(pgr);
+                    }
+                }
+            }
+        }
+
         adapter.filter(pgrList);
     }
 }

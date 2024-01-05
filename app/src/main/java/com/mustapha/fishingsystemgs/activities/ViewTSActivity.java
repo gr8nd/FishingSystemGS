@@ -30,9 +30,9 @@ private ViewTSAdapter adapter;
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        TSDatabase pgrDb = new TSDatabase(ViewTSActivity.this,
+        TSDatabase tsDatabase = new TSDatabase(ViewTSActivity.this,
                 "tss.db", null, 1);
-        tsList = pgrDb.getTss();
+        tsList = tsDatabase.getTss();
         adapter = new ViewTSAdapter(this);
         adapter.setTS(tsList);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
