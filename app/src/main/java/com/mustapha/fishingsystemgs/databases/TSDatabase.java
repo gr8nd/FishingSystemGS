@@ -77,6 +77,23 @@ public class TSDatabase extends SQLiteOpenHelper {
         return -1;
     }
 
+    public int update(String id, TS ts) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(COLUMN_TS_ID, ts.getId());
+            values.put(COLUMN_TS_PGR_DNA, ts.getDnaOfMother());
+            values.put(COLUMN_THIRD_DECIMAL_NUMBER, ts.getThirdDecimalOfMother());
+            values.put(COLUMN_NAME, ts.getName());
+            values.put(COLUMN_TS_NAME, ts.getTsName());
+            return db.update(TS_TABLE_NAME, values,"id = ? ", new String[]{id});
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+        }
+        return -1;
+    }
+
     public void deleteAll() {
         try {
             SQLiteDatabase db = this.getWritableDatabase();

@@ -42,16 +42,16 @@ public class PGRDatabase extends SQLiteOpenHelper {
 
     }
 
-    public void insert(PGR PGR) {
+    public void insert(PGR pgr) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            values.put(COLUMN_PGR_ID, PGR.getDna());
-            values.put(COLUMN_PGR_NAME, PGR.getName());
-            values.put(COLUMN_FIRST_DECIMAL_NUMBER, PGR.getFirstDecimalNumber());
-            values.put(COLUMN_SECOND_DECIMAL_NUMBER, PGR.getSecondDecimalNumber());
-            values.put(COLUMN_THIRD_DECIMAL_NUMBER, PGR.getThirdDecimalNumber());
+            values.put(COLUMN_PGR_ID, pgr.getDna());
+            values.put(COLUMN_PGR_NAME, pgr.getName());
+            values.put(COLUMN_FIRST_DECIMAL_NUMBER, pgr.getFirstDecimalNumber());
+            values.put(COLUMN_SECOND_DECIMAL_NUMBER, pgr.getSecondDecimalNumber());
+            values.put(COLUMN_THIRD_DECIMAL_NUMBER, pgr.getThirdDecimalNumber());
 
             db.insert(PGR_TABLE_NAME, null, values);
 
@@ -69,6 +69,23 @@ public class PGRDatabase extends SQLiteOpenHelper {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             return db.delete(PGR_TABLE_NAME, "id = ? ", new String[]{id});
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+        }
+        return -1;
+    }
+
+    public int update(String id, PGR pgr) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(COLUMN_PGR_ID, pgr.getDna());
+            values.put(COLUMN_PGR_NAME, pgr.getName());
+            values.put(COLUMN_FIRST_DECIMAL_NUMBER, pgr.getFirstDecimalNumber());
+            values.put(COLUMN_SECOND_DECIMAL_NUMBER, pgr.getSecondDecimalNumber());
+            values.put(COLUMN_THIRD_DECIMAL_NUMBER, pgr.getThirdDecimalNumber());
+            return db.update(PGR_TABLE_NAME, values,"id = ? ", new String[]{id});
         } catch (Exception e) {
             Log.e(TAG, e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
         }
@@ -128,7 +145,7 @@ public class PGRDatabase extends SQLiteOpenHelper {
     }
 
     public List<PGR> getPGRs() {
-        List<PGR> PGRS = new ArrayList<>();
+        List<PGR> pgrs = new ArrayList<>();
         Cursor cursor = null;
         try {
             SQLiteDatabase db = this.getReadableDatabase();
@@ -145,7 +162,7 @@ public class PGRDatabase extends SQLiteOpenHelper {
                     PGR.setSecondDecimalNumber(Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SECOND_DECIMAL_NUMBER))));
                     PGR.setThirdDecimalNumber(Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_THIRD_DECIMAL_NUMBER))));
 
-                    PGRS.add(PGR);
+                    pgrs.add(PGR);
 
                 } while (cursor.moveToPrevious());
             }
@@ -156,6 +173,6 @@ public class PGRDatabase extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        return PGRS;
+        return pgrs;
     }
 }

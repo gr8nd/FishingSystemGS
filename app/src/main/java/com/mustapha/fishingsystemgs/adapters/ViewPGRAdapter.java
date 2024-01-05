@@ -131,7 +131,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                 PGR pgr2 = new PGR(name, firstDecimalNum, secondDecimalNum, thirdDecimalNum, dna);
                 PGRDatabase pgrDb = new PGRDatabase(context,
                         "pgrs.db", null, 1);
-                pgrDb.insert(pgr2);
+                pgrDb.update(pgr.getDna(), pgr2);
                 pgrs.remove(position);
                 pgrs.add(position, pgr2);
                 notifyItemChanged(position);
