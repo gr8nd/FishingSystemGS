@@ -77,15 +77,6 @@ public class MainActivity extends AppCompatActivity {
         Button addBtn = findViewById(R.id.add);
         SearchView searchView = findViewById(R.id.searchView);
 
-        adapter = new SearchedResultsAdapter();
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
-
-        objectList = new ArrayList<>();
-
 
         EditText firstDecimal = findViewById(R.id.firstDecimalEdit);
         EditText secondDecimal = findViewById(R.id.secondDecimalEdit);
@@ -417,6 +408,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+
+        adapter = new SearchedResultsAdapter();
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+
+        objectList = new ArrayList<>();
+
         list = new ArrayList<>();
         pgrList = new ArrayList<>();
 
