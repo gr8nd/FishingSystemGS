@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         Button addBtn = findViewById(R.id.add);
         SearchView searchView = findViewById(R.id.searchView);
 
+        initialise();
 
         EditText firstDecimal = findViewById(R.id.firstDecimalEdit);
         EditText secondDecimal = findViewById(R.id.secondDecimalEdit);
@@ -409,6 +410,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
+        initialise();
+
+        super.onResume();
+    }
+
+    private void initialise()
+    {
         adapter = new SearchedResultsAdapter();
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -446,7 +454,5 @@ public class MainActivity extends AppCompatActivity {
         objectList.addAll(list);
 
         adapter.setObjectList(objectList);
-
-        super.onResume();
     }
 }

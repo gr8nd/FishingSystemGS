@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mustapha.fishingsystemgs.activities.MainActivity;
 import com.mustapha.fishingsystemgs.classes.PGR;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -58,19 +60,101 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         });
 
         holder.delete.setOnClickListener(view -> {
+            try {
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setMessage("Do you really want to delete this PGR?")
+                        .setCancelable(true)
+                        .setPositiveButton("Yes", (dialogInterface, i) -> {
+                            pgrs.remove(position);
+                            PGRDatabase pgrDb = new PGRDatabase(context,
+                                    "pgrs.db", null, 1);
+                            pgrDb.delete(pgr.getDna());
+                            notifyItemRemoved(position);
+                        })
+                        .create();
+                dialog.show();
+            }catch (Exception e)
+            {
 
-            AlertDialog dialog = new AlertDialog.Builder(context)
-                    .setMessage("Do you really want to delete this PGR?")
-                    .setCancelable(true)
-                    .setPositiveButton("Yes", (dialogInterface, i) -> {
-                        pgrs.remove(position);
-                        PGRDatabase pgrDb = new PGRDatabase(context,
-                                "pgrs.db", null, 1);
-                        pgrDb.delete(pgr.getDna());
-                        notifyItemRemoved(position);
-                    })
-                    .create();
-            dialog.show();
+            }
+        });
+
+        holder.edit.setOnClickListener(view -> {
+            holder.addTs.setVisibility(View.GONE);
+            holder.relativeLayout2.setVisibility(View.VISIBLE);
+            holder.firstDecimal.setText(String.valueOf(pgr.getFirstDecimalNumber()));
+            holder.secondDecimal.setText(String.valueOf(pgr.getSecondDecimalNumber()));
+            holder.edit.setVisibility(View.GONE);
+        });
+
+        holder.secondDecimal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    String s1 = holder.firstDecimal.getText().toString();
+                    String s2 = holder.secondDecimal.getText().toString();
+                    double firstDecimalNum = Double.parseDouble(s1);
+                    double secondDecimalNum = Double.parseDouble(s2);
+                    double thirdDecimalNum = firstDecimalNum - secondDecimalNum;
+                    DecimalFormat df = new DecimalFormat("#.#####");
+                    df.setRoundingMode(RoundingMode.CEILING);
+                    String s3 = "PGR = " + s1 + "-" + s2 + " " + df.format(thirdDecimalNum);
+                    holder.formedPGR.setText(s3);
+                }catch (Exception ignored)
+                {
+
+                }
+            }
+        });
+
+        holder.addBtn.setOnClickListener(view -> {
+            try {
+                String s1 = holder.firstDecimal.getText().toString().replace(" ", "");
+                String s2 = holder.secondDecimal.getText().toString().replace(" ", "");
+                double firstDecimalNum = Double.parseDouble(s1);
+                double secondDecimalNum = Double.parseDouble(s2);
+                double thirdDecimalNum = firstDecimalNum - secondDecimalNum;
+                DecimalFormat df = new DecimalFormat("#.#####");
+                df.setRoundingMode(RoundingMode.CEILING);
+                String name = s1 + "-" + s2 + " " + df.format(thirdDecimalNum);
+                String dna = pgr.getDna();
+                PGR pgr2 = new PGR(name, firstDecimalNum, secondDecimalNum, thirdDecimalNum, dna);
+                PGRDatabase pgrDb = new PGRDatabase(context,
+                        "pgrs.db", null, 1);
+                pgrDb.insert(pgr2);
+                pgrs.remove(position);
+                pgrs.add(position, pgr2);
+                notifyItemChanged(position);
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setMessage("Your PGR has been successfully edited.")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            holder.relativeLayout2.setVisibility(View.GONE);
+                            holder.edit.setVisibility(View.VISIBLE);
+                        })
+                        .create();
+                dialog.show();
+            }catch (Exception ignored)
+            {
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setMessage("Please type First Decimal first, then type the Second Decimal and then click on the Add button.")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        })
+                        .create();
+                dialog.show();
+            }
+
         });
 
         holder.tsNameEdit.addTextChangedListener(new TextWatcher() {
@@ -156,10 +240,15 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, ts, number;
         private final Button addTs, add;
-        private final RelativeLayout relativeLayout;
-        private EditText tsNameEdit;
+        private final RelativeLayout relativeLayout, relativeLayout2;
+        private final EditText tsNameEdit;
 
-        private TextView delete;
+        private final TextView delete;
+        private final TextView edit;
+        Button addBtn;
+        EditText firstDecimal;
+        EditText secondDecimal;
+        TextView formedPGR;
 
         ViewHolder(View view) {
             super(view);
@@ -169,7 +258,13 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
             number = view.findViewById(R.id.number);
             add = view.findViewById(R.id.add);
             delete = view.findViewById(R.id.delete);
+            edit = view.findViewById(R.id.edit);
+            addBtn = view.findViewById(R.id.edit_pgr);
+            firstDecimal = view.findViewById(R.id.firstDecimalEdit);
+            secondDecimal = view.findViewById(R.id.secondDecimalEdit);
+            formedPGR = view.findViewById(R.id.third_decimal);
             relativeLayout = view.findViewById(R.id.house1);
+            relativeLayout2 = view.findViewById(R.id.house2);
             tsNameEdit = view.findViewById(R.id.tsNameEdit);
             ts = view.findViewById(R.id.ts);
         }

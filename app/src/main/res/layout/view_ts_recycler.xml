@@ -43,10 +43,103 @@
         android:drawableTop="@drawable/baseline_delete_24"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/delete"
+        android:id="@+id/edit"
+        android:layout_alignParentEnd="true"
+        android:textStyle="bold"
+        android:textColor="@color/purple_700"
+        android:text="@string/edit"
+        android:drawableTop="@drawable/baseline_edit_24"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:id="@+id/house1"
+        android:visibility="gone"
+        android:layout_below="@id/edit"
+        android:gravity="center_horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:text="@string/ts_name"
+            android:id="@+id/first_decimal"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/rounded_corner1"
+            android:layout_below="@id/first_decimal"
+            android:id="@+id/text_input_first_decimal">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:id="@+id/tsNameEdit"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:visibility="visible"
+                android:backgroundTint="@color/white"
+                android:inputType="text"
+                android:textColor="@color/purple_700"
+                android:textColorHint="@color/black"
+                android:gravity="start|bottom"
+                android:autofillHints="@string/first_decimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="50dp"
+            android:layout_below="@id/text_input_first_decimal"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="@string/ts"
+            android:id="@+id/ts"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/ts"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/add"
+            android:textAllCaps="false"
+            android:text="@string/edit"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:typeface="sans"
+            android:background="@drawable/rounded_corner4"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_below="@id/delete"
+        android:layout_below="@id/edit"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 

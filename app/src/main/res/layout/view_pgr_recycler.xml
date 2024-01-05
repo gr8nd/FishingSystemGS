@@ -52,13 +52,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/delete"
         android:layout_alignParentEnd="true"
         android:textStyle="bold"
         android:textColor="@color/purple_700"
         android:text="@string/delete"
         android:drawableTop="@drawable/baseline_delete_24"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/delete"
+        android:id="@+id/edit"
+        android:layout_alignParentEnd="true"
+        android:textStyle="bold"
+        android:textColor="@color/purple_700"
+        android:text="@string/edit"
+        android:drawableTop="@drawable/baseline_edit_24"
         />
 
     <RelativeLayout
@@ -132,6 +146,123 @@
             android:id="@+id/add"
             android:textAllCaps="false"
             android:text="@string/add"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:typeface="sans"
+            android:background="@drawable/rounded_corner4"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:id="@+id/house2"
+        android:visibility="gone"
+        android:layout_below="@id/add_ts"
+        android:gravity="center_horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="@string/first_decimal"
+            android:id="@+id/first_decimal1"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/rounded_corner1"
+            android:layout_below="@id/first_decimal1"
+            android:id="@+id/text_input_first_decimal1">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:id="@+id/firstDecimalEdit"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:background="@drawable/rounded_corner1"
+                android:visibility="visible"
+                android:backgroundTint="@color/white"
+                android:inputType="numberDecimal"
+                android:textColor="@color/purple_700"
+                android:textColorHint="@color/black"
+                android:gravity="start|bottom"
+                android:autofillHints="@string/first_decimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="120dp"
+            android:layout_toEndOf="@id/first_decimal1"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="@string/second_decimal"
+            android:id="@+id/second_decimal"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_corner1"
+            android:layout_toEndOf="@id/text_input_first_decimal1"
+            android:layout_marginStart="50dp"
+            android:layout_below="@id/first_decimal1"
+            android:id="@+id/text_input_decimal_decimal">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:id="@+id/secondDecimalEdit"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:background="@drawable/rounded_corner1"
+                android:visibility="visible"
+                android:backgroundTint="@color/white"
+                android:inputType="numberDecimal"
+                android:textColor="@color/purple_700"
+                android:textColorHint="@color/black"
+                android:gravity="start|bottom"
+                android:autofillHints="@string/first_decimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="50dp"
+            android:layout_below="@id/text_input_first_decimal1"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="@string/third_decimal"
+            android:id="@+id/third_decimal"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/third_decimal"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/edit_pgr"
+            android:textAllCaps="false"
+            android:text="@string/edit"
             android:textStyle="bold"
             android:textSize="20sp"
             android:typeface="sans"

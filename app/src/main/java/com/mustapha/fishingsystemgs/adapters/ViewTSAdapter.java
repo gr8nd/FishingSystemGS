@@ -1,10 +1,14 @@
 package com.mustapha.fishingsystemgs.adapters;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +22,7 @@ import com.mustapha.fishingsystemgs.databases.TSDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder> {
     private final Context context;
@@ -59,6 +64,73 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
             dialog.show();
         });
 
+        holder.edit.setOnClickListener(view -> {
+            holder.relativeLayout.setVisibility(View.VISIBLE);
+            holder.edit.setVisibility(View.GONE);
+            holder.tsNameEdit.setText(ts.getTsName());
+        });
+
+        holder.add.setOnClickListener(view -> {
+            try {
+                holder.relativeLayout.setVisibility(View.GONE);
+                holder.edit.setVisibility(View.VISIBLE);
+                String s1 = holder.tsNameEdit.getText().toString().replace(" ", "");
+                if(s1.isEmpty())
+                {
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setMessage("Please first type the TS name and click on the Add button.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            })
+                            .create();
+                    dialog.show();
+                }else {
+                    String s2 = s1 + " " + ts.getThirdDecimalOfMother();
+                    TSDatabase tsDb = new TSDatabase(context,
+                            "tss.db", null, 1);
+                    TS ts1 = new TS(s2, ts.getThirdDecimalOfMother(), ts.getDnaOfMother(), ts.getId(), s1);
+                    tsDb.insert(ts1);
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setMessage("Your TS has been successfully edited.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            })
+                            .create();
+                    dialog.show();
+                }
+
+            }catch (Exception ignored)
+            {
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setMessage("Please first type the TS name and click on the Add button.")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        })
+                        .create();
+                dialog.show();
+            }
+        });
+
+        holder.tsNameEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String s1 = holder.tsNameEdit.getText().toString();
+                String s2 = context.getResources().getString(R.string.ts) + " = " +
+                        s1 + " " + ts.getThirdDecimalOfMother();
+                holder.ts.setText(s2);
+            }
+        });
+
 
     }
 
@@ -79,14 +151,23 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView name, number;
-        private final TextView delete;
+        private final TextView name, number, ts;
+        private final TextView delete, edit;
+
+        private final EditText tsNameEdit;
+        private final RelativeLayout relativeLayout;
+        private final Button add;
 
         ViewHolder(View view) {
             super(view);
 
             name = view.findViewById(R.id.name);
             delete =view.findViewById(R.id.delete);
+            edit = view.findViewById(R.id.edit);
+            tsNameEdit = view.findViewById(R.id.tsNameEdit);
+            relativeLayout = view.findViewById(R.id.house1);
+            ts = view.findViewById(R.id.ts);
+            add = view.findViewById(R.id.add);
             number = view.findViewById(R.id.number);
         }
     }
