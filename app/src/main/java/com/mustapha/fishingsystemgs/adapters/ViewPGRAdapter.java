@@ -232,7 +232,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
     }
 
     public void filter(List<PGR> pgrs) {
-        this.pgrs = new ArrayList<>(pgrs);
+        this.pgrs = pgrs;
         notifyDataSetChanged();
     }
 

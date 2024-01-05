@@ -147,7 +147,7 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
     }
 
     public void filter(List<TS> tsList) {
-        this.tsList = new ArrayList<>(tsList);
+        this.tsList = tsList;
         notifyDataSetChanged();
     }
 
