@@ -90,6 +90,9 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
                             "tss.db", null, 1);
                     TS ts1 = new TS(s2, ts.getThirdDecimalOfMother(), ts.getDnaOfMother(), ts.getId(), s1);
                     tsDb.update(ts.getId(), ts1);
+                    tsList.remove(position);
+                    tsList.add(position, ts1);
+                    notifyItemChanged(position);
                     AlertDialog dialog = new AlertDialog.Builder(context)
                             .setMessage("Your TS has been successfully edited.")
                             .setCancelable(true)
