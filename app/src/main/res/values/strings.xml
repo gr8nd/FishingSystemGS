@@ -20,4 +20,11 @@
     <string name="download_dir">FishingSystemGS</string>
     <string name="upload">Upload data</string>
     <string name="edit">Edit</string>
+    <string name="copy_ts">Copy TS</string>
+    <string name="copy_pgr">Copy PGR</string>
+    <string name="subtract">Subtract TS</string>
+    <string name="subtract1">Subtract</string>
+    <string name="copy">Copy</string>
+    <string name="first_ts">First TS</string>
+    <string name="second_ts">Second TS</string>
 </resources>

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SearchView;
-import android.widget.TextView;
+
 
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.adapters.ViewPGRAdapter;

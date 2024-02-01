@@ -1,5 +1,7 @@
 package com.mustapha.fishingsystemgs.adapters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -76,6 +79,11 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
             {
 
             }
+        });
+
+        holder.copy.setOnClickListener(view -> {
+            copy(pgr.getName());
+            //TODO
         });
 
         holder.edit.setOnClickListener(view -> {
@@ -231,6 +239,13 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+    public void copy(String text)
+    {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copy PGR", text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(context, "TS copied to clipboard", Toast.LENGTH_LONG).show();
+    }
     public void filter(List<PGR> pgrs) {
         this.pgrs = pgrs;
         notifyDataSetChanged();
@@ -242,7 +257,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         private final RelativeLayout relativeLayout, relativeLayout2;
         private final EditText tsNameEdit;
 
-        private final TextView delete;
+        private final TextView delete, copy;
         private final TextView edit;
         Button addBtn;
         EditText firstDecimal;
@@ -257,6 +272,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
             number = view.findViewById(R.id.number);
             add = view.findViewById(R.id.add);
             delete = view.findViewById(R.id.delete);
+            copy = view.findViewById(R.id.copy);
             edit = view.findViewById(R.id.edit);
             addBtn = view.findViewById(R.id.edit_pgr);
             firstDecimal = view.findViewById(R.id.firstDecimalEdit);

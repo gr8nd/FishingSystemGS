@@ -4,14 +4,163 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentStart="true"
+        android:id="@+id/subtract_ts"
+        android:textAllCaps="false"
+        android:text="@string/subtract"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textSize="14sp"
+        android:background="#579F04"
+        android:typeface="sans"
+        android:textColor="@color/white" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_below="@id/subtract_ts"
+        android:visibility="gone"
+        android:id="@+id/subtract_relative_layout">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:id="@+id/house0"
+            android:visibility="visible"
+            android:gravity="center_horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="@string/first_ts"
+                android:id="@+id/first_ts"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/rounded_corner1"
+                android:layout_below="@id/first_ts"
+                android:id="@+id/text_input_first_ts">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="150dp"
+                    android:layout_height="60dp"
+                    android:id="@+id/firstTSEdit"
+                    android:maxLength="50"
+                    android:maxLines="1"
+                    android:background="@drawable/rounded_corner1"
+                    android:visibility="visible"
+                    android:backgroundTint="@color/white"
+                    android:inputType="text"
+                    android:textColor="@color/purple_700"
+                    android:textColorHint="@color/black"
+                    android:gravity="start|bottom"
+                    android:autofillHints="@string/first_decimal" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="160dp"
+                android:layout_toEndOf="@id/first_ts"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="@string/second_ts"
+                android:id="@+id/second_decimal"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_corner1"
+                android:layout_toEndOf="@id/text_input_first_ts"
+                android:layout_marginStart="50dp"
+                android:layout_below="@id/first_ts"
+                android:id="@+id/text_input_decimal_decimal">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="150dp"
+                    android:layout_height="60dp"
+                    android:id="@+id/secondTSEdit"
+                    android:maxLength="50"
+                    android:maxLines="1"
+                    android:background="@drawable/rounded_corner1"
+                    android:visibility="visible"
+                    android:backgroundTint="@color/white"
+                    android:inputType="text"
+                    android:textColor="@color/purple_700"
+                    android:textColorHint="@color/black"
+                    android:gravity="start|bottom"
+                    android:autofillHints="@string/first_decimal" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:id="@+id/copy_child"
+                android:layout_below="@id/text_input_first_ts"
+                android:layout_marginStart="10dp"
+                android:layout_alignParentStart="true"
+                android:textStyle="bold"
+                android:textColor="@color/purple_700"
+                android:text="@string/copy"
+                android:drawableStart="@drawable/baseline_content_copy_24"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/copy_child"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/sub"
+                android:textAllCaps="false"
+                android:text="@string/subtract1"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:typeface="sans"
+                android:background="@drawable/rounded_corner4"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
+        android:layout_below="@id/subtract_relative_layout"
         android:gravity="center"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:id="@+id/name"
+        android:textIsSelectable="true"
         android:textSize="18sp"
         android:text="@string/app_name"
         />
@@ -21,6 +170,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
+        android:layout_below="@id/subtract_relative_layout"
         android:layout_alignParentStart="true"
         android:gravity="start"
         android:textColor="@color/purple_700"
@@ -36,6 +186,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
         android:layout_alignParentEnd="true"
+        android:layout_below="@id/subtract_relative_layout"
         android:textStyle="bold"
         android:id="@+id/delete"
         android:textColor="@color/purple_700"
@@ -57,6 +208,18 @@
         android:drawableTop="@drawable/baseline_edit_24"
         />
 
+
+    <TextView
+        android:id="@+id/copy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/delete"
+        android:layout_marginTop="10dp"
+        android:drawableTop="@drawable/baseline_content_copy_24"
+        android:text="@string/copy_ts"
+        android:textColor="@color/purple_700"
+        android:textStyle="bold" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +227,7 @@
         android:layout_marginTop="20dp"
         android:id="@+id/house1"
         android:visibility="gone"
-        android:layout_below="@id/edit"
+        android:layout_below="@id/copy"
         android:gravity="center_horizontal"
         >
         <TextView

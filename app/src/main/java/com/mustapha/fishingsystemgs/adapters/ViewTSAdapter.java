@@ -1,5 +1,6 @@
 package com.mustapha.fishingsystemgs.adapters;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import android.content.ClipboardManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -24,6 +28,7 @@ import java.util.List;
 
 public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder> {
     private final Context context;
+    private String result;
 
     private List<TS> tsList;
 
@@ -62,10 +67,44 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
             dialog.show();
         });
 
+        holder.copy.setOnClickListener(view -> {
+            copy(ts.getName());
+            //TODO
+        });
+
+        holder.copyChild.setOnClickListener(view -> {
+            copyResult(result);
+            //TODO
+        });
+
         holder.edit.setOnClickListener(view -> {
             holder.relativeLayout.setVisibility(View.VISIBLE);
             holder.edit.setVisibility(View.GONE);
             holder.tsNameEdit.setText(ts.getTsName());
+        });
+
+        holder.subtractTs.setOnClickListener(view -> {
+            holder.subtractRelativeLayout.setVisibility(View.VISIBLE);
+            holder.subtractTs.setVisibility(View.GONE);
+        });
+
+        holder.sub.setOnClickListener(view -> {
+            String firstTs = holder.firstTsEdit.getText().toString().trim().replaceFirst(" ", "");
+            String secondTs = holder.secondTsEdit.getText().toString().trim().replace(" ", "");
+            try {
+                String decimalOfFirstTs = firstTs.substring(firstTs.lastIndexOf(".") - 1);
+                String decimalOfSecondTs = secondTs.substring(secondTs.lastIndexOf(".") - 1);
+                String sharedPart = firstTs.substring(0, firstTs.indexOf("/") + 1);
+                String firstPart1 = firstTs.substring(firstTs.lastIndexOf("-")-1, firstTs.lastIndexOf("-") + 2);
+                String secondPart1 = secondTs.substring(secondTs.lastIndexOf("-")-1, secondTs.lastIndexOf("-") + 2);
+                double subValue = Math.abs(Double.parseDouble(decimalOfFirstTs) - Double.parseDouble(decimalOfSecondTs));
+                result = sharedPart + firstPart1 + ";" + secondPart1 + "/" + subValue;
+                String sr = "Copy      Born TS: " + result;
+                holder.copyChild.setText(sr);
+            }catch (Exception ignored)
+            {
+
+            }
         });
 
         holder.add.setOnClickListener(view -> {
@@ -146,6 +185,21 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public void copy(String text)
+    {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copy TS", text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(context, "TS copied to clipboard", Toast.LENGTH_LONG).show();
+    }
+
+    public void copyResult(String text)
+    {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copy New TS child", text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(context, "New TS child copied to clipboard", Toast.LENGTH_LONG).show();
+    }
     public void filter(List<TS> tsList) {
         this.tsList = tsList;
         notifyDataSetChanged();
@@ -153,10 +207,12 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, number, ts;
-        private final TextView delete, edit;
+        private final TextView delete, edit, copy, copyChild, sub, subtractTs;
 
         private final EditText tsNameEdit;
-        private final RelativeLayout relativeLayout;
+
+        private final EditText firstTsEdit, secondTsEdit;
+        private final RelativeLayout relativeLayout, subtractRelativeLayout;
         private final Button add;
 
         ViewHolder(View view) {
@@ -165,6 +221,13 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
             name = view.findViewById(R.id.name);
             delete =view.findViewById(R.id.delete);
             edit = view.findViewById(R.id.edit);
+            copy = view.findViewById(R.id.copy);
+            subtractRelativeLayout = view.findViewById(R.id.subtract_relative_layout);
+            subtractTs = view.findViewById(R.id.subtract_ts);
+            firstTsEdit = view.findViewById(R.id.firstTSEdit);
+            secondTsEdit = view.findViewById(R.id.secondTSEdit);
+            sub = view.findViewById(R.id.sub);
+            copyChild = view.findViewById(R.id.copy_child);
             tsNameEdit = view.findViewById(R.id.tsNameEdit);
             relativeLayout = view.findViewById(R.id.house1);
             ts = view.findViewById(R.id.ts);
