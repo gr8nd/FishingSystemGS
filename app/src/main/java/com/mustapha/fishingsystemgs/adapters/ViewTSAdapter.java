@@ -101,6 +101,7 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
                 result = sharedPart + firstPart1 + ";" + secondPart1 + "/" + subValue;
                 String sr = "Copy      Born TS: " + result;
                 holder.copyChild.setText(sr);
+                holder.copyChild.setVisibility(View.VISIBLE);
             }catch (Exception ignored)
             {
 

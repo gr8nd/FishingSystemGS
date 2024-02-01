@@ -244,7 +244,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Copy PGR", text);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(context, "TS copied to clipboard", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "PGR copied to clipboard", Toast.LENGTH_LONG).show();
     }
     public void filter(List<PGR> pgrs) {
         this.pgrs = pgrs;
