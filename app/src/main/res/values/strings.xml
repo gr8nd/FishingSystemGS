@@ -45,4 +45,6 @@
     <string name="copy_token">Copy Token</string>
     <string name="share_token">Share Token</string>
     <string name="submit">Authorize Token</string>
+    <string name="enter_your_admin_key">Enter your admin key</string>
+    <string name="go_on">Continue</string>
 </resources>
