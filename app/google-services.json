@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1077658233707",
+    "project_id": "fishing-system-gs",
+    "storage_bucket": "fishing-system-gs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077658233707:android:a1d8c1e69049d4abb13a2e",
+        "android_client_info": {
+          "package_name": "com.mustapha.fishingsystemgs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbetxJKzmRaBkpiTjRRJq8nhaHLaFyjiM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -493,6 +494,7 @@ public class MainActivity extends AppCompatActivity {
         KVSDatabase kvssDb = new KVSDatabase(MainActivity.this,
                 "kvs.db", null, 1);
         List<KVS> kvss = kvssDb.getKVSs();
+
 
         DatabaseReference pgrsRef = FirebaseDatabase.getInstance().getReference("pgrs");
         for(PGR pgr: pgrs)
