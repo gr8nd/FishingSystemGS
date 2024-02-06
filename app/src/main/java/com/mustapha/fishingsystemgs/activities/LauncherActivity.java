@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class LauncherActivity extends AppCompatActivity {
     private static final String APPLICATION_ID = "com.mustapha.fishingsystemgs";
@@ -38,7 +39,6 @@ public class LauncherActivity extends AppCompatActivity {
 
 
         if(loadAdminKey() != null) {
-            relativeLayout.setVisibility(View.VISIBLE);
             DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
             adminsRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -62,64 +62,46 @@ public class LauncherActivity extends AppCompatActivity {
         }
 
 
-        if(loadAdminKey() == null) {
-            relativeLayout.setVisibility(View.VISIBLE);
-        }
-
-        continueBtn.setOnClickListener(view -> {
-            String key = adminKeyEdit.getText().toString().trim();
-            if(loadAdminKey() != null && loadAdminKey().equals(key))
-            {
-                Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
-                startActivity(intent);
-            }else if(loadAdminKey() == null) {
-                  relativeLayout.setVisibility(View.VISIBLE);
-                  DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
-                adminsRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        boolean success = false;
-                        for(DataSnapshot dataSnapshot: snapshot.getChildren())
+          continueBtn.setOnClickListener(view -> {
+              String key = adminKeyEdit.getText().toString().trim();
+              DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
+            adminsRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean success = false;
+                    for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                    {
+                        Admin admin = dataSnapshot.getValue(Admin.class);
+                        if(admin != null && admin.getId().equals(key))
                         {
-                            Admin admin = dataSnapshot.getValue(Admin.class);
-                            if(admin != null && admin.getId().equals(key))
-                            {
-                                saveAdminKey(key);
-                                Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                success = true;
-                                finish();
-                            }
+                            saveAdminKey(key);
+                            Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            success = true;
+                            finish();
                         }
-
-                        if(!success)
-                        {
-                            AlertDialog dialog = new AlertDialog.Builder(LauncherActivity.this)
-                                    .setMessage("Error! Wrong admin key detected.")
-                                    .setCancelable(true)
-                                    .setPositiveButton("Ok", (dialogInterface, i) -> {
-                                    })
-                                    .create();
-                            dialog.show();
-                        }else {
-                            AlertDialog dialog = new AlertDialog.Builder(LauncherActivity.this)
-                                    .setMessage("Your admin key has been authenticated.")
-                                    .setCancelable(true)
-                                    .setPositiveButton("Ok", (dialogInterface, i) -> {
-                                    })
-                                    .create();
-                            dialog.show();
-                        }
-
                     }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                    if(!success)
+                    {
+                        AlertDialog dialog = new AlertDialog.Builder(LauncherActivity.this)
+                                .setMessage("Error! Wrong admin key detected.")
+                                .setCancelable(true)
+                                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                })
+                                .create();
+                        dialog.show();
+                    }else {
+                        Toast.makeText(LauncherActivity.this,
+                                "Your admin key has been authenticated.", Toast.LENGTH_LONG).show();
                     }
-                });
-
-            }
-
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
         });
+
+        relativeLayout.setVisibility(View.VISIBLE);
 
     }
 
