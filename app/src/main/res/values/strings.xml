@@ -14,7 +14,7 @@
     <string name="add_ts_to">Add TS to this PGR</string>
     <string name="shareWith">Share using</string>
     <string name="download">Download Data</string>
-    <string name="share_data">Share data</string>
+    <string name="share_data">Share Data</string>
     <string name="view_tss">View TS</string>
     <string name="delete">Delete</string>
     <string name="download_dir">FishingSystemGS</string>
@@ -37,7 +37,7 @@
     <string name="tsg_count">TSG Counter</string>
     <string name="kvs_count">KVS Counter</string>
     <string name="view_tsg">View TSG</string>
-    <string name="admin_key">Admin Key</string>
+    <string name="admin_key">Admin Panel</string>
     <string name="generate_admin_token">Generate an Admin secret token</string>
     <string name="token_will_appear_here">Token will appear here</string>
     <string name="generate_token">Generate Token</string>
@@ -47,4 +47,6 @@
     <string name="submit">Authorize Token</string>
     <string name="enter_your_admin_key">Enter your admin key</string>
     <string name="go_on">Continue</string>
+    <string name="delete_admin">To remove an admin, enter the admin\'s token in the text box below and click on the remove the admin button.</string>
+    <string name="remove_admin">Remove the Admin</string>
 </resources>

@@ -1,9 +1,16 @@
 package com.mustapha.fishingsystemgs.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mustapha.fishingsystemgs.R;
+import com.mustapha.fishingsystemgs.classes.Admin;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -13,6 +20,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +42,27 @@ public class AdminActivity extends AppCompatActivity {
         TextView copy = findViewById(R.id.copy);
         TextView share = findViewById(R.id.share);
         Button generateToken = findViewById(R.id.generate);
+        EditText adminToken = findViewById(R.id.admin_key_edit);
+        Button removeAdmin = findViewById(R.id.remove_admin_btn);
 
         Button authorize = findViewById(R.id.submit);
+
+        removeAdmin.setOnClickListener(view -> {
+            DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
+            adminsRef.child(adminToken.getText().toString()).setValue(null).addOnCompleteListener(task -> {
+                if(task.isSuccessful())
+                {
+                    AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
+                            .setMessage("The Admin has been removed.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            })
+                            .create();
+                    dialog.show();
+                }
+            });
+
+        });
 
         copy.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) AdminActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -62,19 +89,29 @@ public class AdminActivity extends AppCompatActivity {
         });
 
         authorize.setOnClickListener(view -> {
-            if(!token.getText().toString().equals(getResources().getString(R.string.token_will_appear_here)))
+            String tokenKey = token.getText().toString();
+            if(!tokenKey.equals(getResources().getString(R.string.token_will_appear_here)))
             {
                 copy.setVisibility(View.VISIBLE);
                 share.setVisibility(View.VISIBLE);
-                //TODO
+                DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
+                Admin admin = new Admin(tokenKey, "");
+                adminsRef.child(tokenKey).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
+                                    .setMessage("Token has been authorized and submitted to the cloud, you can copy and share as you wish.")
+                                    .setCancelable(true)
+                                    .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                    })
+                                    .create();
+                            dialog.show();
+                        }
+                    }
+                });
 
-                AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                        .setMessage("Token has been submitted and authorized, you can copy and share as you wish.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
             }else
             {
                 AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)

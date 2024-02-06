@@ -1,5 +1,6 @@
 package com.mustapha.fishingsystemgs.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -8,9 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,8 +27,14 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.adapters.SearchedResultsAdapter;
+import com.mustapha.fishingsystemgs.classes.Admin;
 import com.mustapha.fishingsystemgs.classes.KVS;
 import com.mustapha.fishingsystemgs.classes.PGR;
 import com.mustapha.fishingsystemgs.classes.TS;
@@ -55,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
     private List<TS> list;
 
     private List<TSG> tsgList;
+
+    private static final String APPLICATION_ID = "com.mustapha.fishingsystemgs";
+    private static final String ADMIN_TOKEN_KEY = APPLICATION_ID + "ADMIN_TOKEN_KEY";
     private List<KVS> kvsList;
 
     private PGRDatabase pgrDb;
@@ -205,12 +217,9 @@ public class MainActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 try {
@@ -340,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
         } else if(id == R.id.upload_data){
             uploadData();
             return true;
-        }else if(id == R.id.generate_admin_key){
+        }else if(id == R.id.admin_panel){
             Intent intent = new Intent(MainActivity.this, AdminActivity.class);
             startActivity(intent);
             return true;
@@ -354,28 +363,155 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        MenuItem adminIcon = menu.findItem(R.id.admin_panel);
+        DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
+        adminsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    Admin admin = dataSnapshot.getValue(Admin.class);
+                    if(admin != null && admin.getId().equals(loadAdminKey()))
+                    {
+                        adminIcon.setVisible(true);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
         return true;
     }
 
-    private void sync()
+    public String loadAdminKey() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getString(ADMIN_TOKEN_KEY, null);
+    }
+
+    private void syncFromOnline()
+    {
+        PGRDatabase pgrDb = new PGRDatabase(MainActivity.this,
+                "pgrs.db", null, 1);
+
+        TSDatabase tssDb = new TSDatabase(MainActivity.this,
+                "tss.db", null, 1);
+
+        TSGDatabase tsgsDb = new TSGDatabase(MainActivity.this,
+                "tsg.db", null, 1);
+
+        KVSDatabase kvssDb = new KVSDatabase(MainActivity.this,
+                "kvs.db", null, 1);
+
+        DatabaseReference pgrsRef = FirebaseDatabase.getInstance().getReference("pgrs");
+        pgrsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    PGR pgr = dataSnapshot.getValue(PGR.class);
+                    if(pgr != null && pgr.getDna() != null)
+                    {
+                        pgrDb.insert(pgr);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        DatabaseReference tssRef = FirebaseDatabase.getInstance().getReference("tsgs");
+        tssRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    TS ts = dataSnapshot.getValue(TS.class);
+                    if(ts != null && ts.getDnaOfMother() != null)
+                    {
+                        tssDb.insert(ts);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        DatabaseReference tsgsRef = FirebaseDatabase.getInstance().getReference("pgrs");
+        tsgsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    TSG tsg = dataSnapshot.getValue(TSG.class);
+                    if(tsg != null && tsg.getDna() != null)
+                    {
+                        tsgsDb.insert(tsg);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvs");
+        kvsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot: snapshot.getChildren())
+                {
+                    KVS kvs = dataSnapshot.getValue(KVS.class);
+                    if(kvs != null && kvs.getDnaOfMother() != null)
+                    {
+                        kvssDb.insert(kvs);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+    private void syncFromOffline()
     {
         PGRDatabase pgrDb = new PGRDatabase(MainActivity.this,
                 "pgrs.db", null, 1);
         List<PGR> pgrs = pgrDb.getPGRs();
 
-        TSDatabase tsDb = new TSDatabase(MainActivity.this,
+        TSDatabase tssDb = new TSDatabase(MainActivity.this,
                 "tss.db", null, 1);
-        List<TS> ts = tsDb.getTss();
+        List<TS> tss = tssDb.getTss();
 
-        TSGDatabase tsgDb = new TSGDatabase(MainActivity.this,
+        TSGDatabase tsgsDb = new TSGDatabase(MainActivity.this,
                 "tsg.db", null, 1);
-        List<TSG> tsgs = tsgDb.getTSGs();
+        List<TSG> tsgs = tsgsDb.getTSGs();
 
-        KVSDatabase kvsDb = new KVSDatabase(MainActivity.this,
+        KVSDatabase kvssDb = new KVSDatabase(MainActivity.this,
                 "kvs.db", null, 1);
-        List<KVS> kvs = kvsDb.getKVSs();
+        List<KVS> kvss = kvssDb.getKVSs();
 
-        //TODO
+        DatabaseReference pgrsRef = FirebaseDatabase.getInstance().getReference("pgrs");
+        for(PGR pgr: pgrs)
+        {
+            pgrsRef.child(pgr.getDna()).setValue(pgr);
+        }
+        DatabaseReference tssRef = FirebaseDatabase.getInstance().getReference("tss");
+        for (TS ts: tss)
+        {
+            tssRef.child(ts.getId()).setValue(ts);
+        }
+        DatabaseReference tsgsRef = FirebaseDatabase.getInstance().getReference("tsgs");
+        for (TSG tsg: tsgs)
+        {
+            tsgsRef.child(tsg.getDna()).setValue(tsg);
+        }
+        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvs");
+        for (KVS kvs: kvss)
+        {
+            kvsRef.child(kvs.getId()).setValue(kvs);
+        }
+
     }
     private void writeToFile() {
         StringBuilder data = new StringBuilder();

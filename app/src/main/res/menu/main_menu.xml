@@ -21,7 +21,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/generate_admin_key"
+        android:id="@+id/admin_panel"
         android:icon="@drawable/baseline_share_24"
         android:title="@string/admin_key"
         app:showAsAction="ifRoom" />
