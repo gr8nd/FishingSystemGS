@@ -105,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
         initialise();
 
+        syncFromOffline();
+
+
         EditText firstDecimal = findViewById(R.id.firstDecimalEdit);
         EditText secondDecimal = findViewById(R.id.secondDecimalEdit);
         TextView formedMother = findViewById(R.id.third_decimal);
@@ -512,6 +515,7 @@ public class MainActivity extends AppCompatActivity {
             kvsRef.child(kvs.getId()).setValue(kvs);
         }
 
+        syncFromOnline();
     }
     private void writeToFile() {
         StringBuilder data = new StringBuilder();
