@@ -27,4 +27,21 @@
     <string name="copy">Copy</string>
     <string name="first_ts">First TS</string>
     <string name="second_ts">Second TS</string>
+    <string name="view_ksv">View KVS</string>
+    <string name="add_tsg">Add TSG</string>
+    <string name="tsg">TSG</string>
+    <string name="type_tsg">Enter the TSG</string>
+    <string name="type_kvs">Type the KVS</string>
+    <string name="tsg_name">Type the TSG name</string>
+    <string name="add_kvs_to">Add KVS to this TSG</string>
+    <string name="tsg_count">TSG Counter</string>
+    <string name="kvs_count">KVS Counter</string>
+    <string name="view_tsg">View TSG</string>
+    <string name="admin_key">Admin Key</string>
+    <string name="generate_admin_token">Generate an Admin secret token</string>
+    <string name="token_will_appear_here">Token will appear here</string>
+    <string name="generate_token">Generate Token</string>
+    <string name="admin_panel">Admin Panel</string>
+    <string name="copy_token">Copy Token</string>
+    <string name="share_token">Share Token</string>
 </resources>

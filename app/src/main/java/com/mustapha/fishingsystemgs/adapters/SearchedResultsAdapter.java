@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.mustapha.fishingsystemgs.R;
+import com.mustapha.fishingsystemgs.classes.KVS;
 import com.mustapha.fishingsystemgs.classes.PGR;
 import com.mustapha.fishingsystemgs.classes.TS;
+import com.mustapha.fishingsystemgs.classes.TSG;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +44,14 @@ public class SearchedResultsAdapter extends RecyclerView.Adapter<SearchedResults
         {
             PGR pgr = (PGR) o;
             holder.name.setText(pgr.getName());
+        }else if(o instanceof TSG)
+        {
+            TSG tsg = (TSG) o;
+            holder.name.setText(tsg.getName());
+        }else if(o instanceof KVS)
+        {
+            KVS kvs = (KVS) o;
+            holder.name.setText(kvs.getName());
         }
 
 

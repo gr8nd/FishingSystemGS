@@ -20,4 +20,10 @@
         android:title="@string/share_data"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/generate_admin_key"
+        android:icon="@drawable/baseline_share_24"
+        android:title="@string/admin_key"
+        app:showAsAction="ifRoom" />
+
 </menu>

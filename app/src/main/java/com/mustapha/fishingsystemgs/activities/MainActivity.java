@@ -26,10 +26,14 @@ import android.widget.TextView;
 
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.adapters.SearchedResultsAdapter;
+import com.mustapha.fishingsystemgs.classes.KVS;
 import com.mustapha.fishingsystemgs.classes.PGR;
 import com.mustapha.fishingsystemgs.classes.TS;
+import com.mustapha.fishingsystemgs.classes.TSG;
+import com.mustapha.fishingsystemgs.databases.KVSDatabase;
 import com.mustapha.fishingsystemgs.databases.PGRDatabase;
 import com.mustapha.fishingsystemgs.databases.TSDatabase;
+import com.mustapha.fishingsystemgs.databases.TSGDatabase;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -50,14 +54,16 @@ public class MainActivity extends AppCompatActivity {
     private List<PGR> pgrList;
     private List<TS> list;
 
-    private PGRDatabase pgrDb;
+    private List<TSG> tsgList;
+    private List<KVS> kvsList;
 
-    private RelativeLayout relativeLayout;
-    private Button addPGRBtn;
+    private PGRDatabase pgrDb;
+    private TSGDatabase tsgDb;
+
+    private RelativeLayout relativeLayout, relativeLayout2;
+    private Button addPGRBtn, addTSGBtn;
     private TextView pgrSearched;
     private SearchedResultsAdapter adapter;
-
-    private List<Object> objectList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +77,17 @@ public class MainActivity extends AppCompatActivity {
 
         Button viewPGRBtn = findViewById(R.id.view_pgr);
         Button viewTSBtn = findViewById(R.id.view_tss);
+
+        Button viewKVSBtn = findViewById(R.id.view_kvs);
+        Button viewTSGBtn = findViewById(R.id.view_tsg);
+
         addPGRBtn = findViewById(R.id.add_mother);
+        addTSGBtn = findViewById(R.id.add_tsg);
+
+        Button addTSG = findViewById(R.id.add_tsg_btn);
+
         relativeLayout = findViewById(R.id.house1);
+        relativeLayout2 = findViewById(R.id.house3);
         Button addBtn = findViewById(R.id.add);
         SearchView searchView = findViewById(R.id.searchView);
 
@@ -81,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
         EditText firstDecimal = findViewById(R.id.firstDecimalEdit);
         EditText secondDecimal = findViewById(R.id.secondDecimalEdit);
         TextView formedMother = findViewById(R.id.third_decimal);
+
+        EditText tsgEdit = findViewById(R.id.tsgNameEdit);
 
         viewPGRBtn.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ViewPGRActivity.class);
@@ -92,9 +109,59 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        viewKVSBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, ViewKVSActivity.class);
+            startActivity(intent);
+        });
+
+        viewTSGBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, ViewTSGActivity.class);
+            startActivity(intent);
+        });
+
         addPGRBtn.setOnClickListener(view -> {
             relativeLayout.setVisibility(View.VISIBLE);
+            relativeLayout2.setVisibility(View.GONE);
             addPGRBtn.setVisibility(View.GONE);
+        });
+
+        addTSGBtn.setOnClickListener(view -> {
+            relativeLayout2.setVisibility(View.VISIBLE);
+            relativeLayout.setVisibility(View.GONE);
+            addTSGBtn.setVisibility(View.GONE);
+        });
+
+        addTSG.setOnClickListener(view -> {
+            try {
+
+                String name = tsgEdit.getText().toString().trim().replace(" ", "");
+                String dna = UUID.randomUUID().toString();;
+                TSG tsg = new TSG(name, dna);
+                TSGDatabase tsgDatabase = new TSGDatabase(this,
+                        "tsg.db", null, 1);
+                tsgDatabase.insert(tsg);
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setMessage("Your TSG has been successfully stored.")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            relativeLayout.setVisibility(View.GONE);
+                            relativeLayout2.setVisibility(View.GONE);
+                            addPGRBtn.setVisibility(View.VISIBLE);
+                            addTSGBtn.setVisibility(View.VISIBLE);
+                        })
+                        .create();
+                dialog.show();
+            }catch (Exception ignored)
+            {
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setMessage("Please type TSG name and then click on the Add button.")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        })
+                        .create();
+                dialog.show();
+            }
+
         });
 
         addBtn.setOnClickListener(view -> {
@@ -116,7 +183,9 @@ public class MainActivity extends AppCompatActivity {
                 displayAlert("Please type First Decimal first, then type the Second Decimal and then click on the Add button.");
             }
             relativeLayout.setVisibility(View.GONE);
+            relativeLayout2.setVisibility(View.GONE);
             addPGRBtn.setVisibility(View.VISIBLE);
+            addTSGBtn.setVisibility(View.VISIBLE);
         });
 
         secondDecimal.addTextChangedListener(new TextWatcher() {
@@ -158,18 +227,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
                 query = query.trim().replace(" ", "");
-                filterTS(query);
+                filterTSAndKVS(query);
 
                 return true;
             }
         });
     }
 
-    private void filterTS(String query) {
+    private void filterTSAndKVS(String query) {
         List<Object> tsList = new ArrayList<>();
         for (TS ts : this.list) {
             if (ts.getName().contains(query) ||
                     ts.getTsName().contains(query)) {
+                tsList.add(ts);
+            }
+        }
+
+        for (KVS ts : this.kvsList) {
+            if (ts.getName().contains(query)) {
                 tsList.add(ts);
             }
         }
@@ -185,6 +260,20 @@ public class MainActivity extends AppCompatActivity {
                     String dnaOfMother = ts.getDnaOfMother();
                     if (dnaOfMother.equals(dna)) {
                         tsList.add(ts);
+                    }
+                }
+            }
+        }
+
+        for (TSG tsg : this.tsgList) {
+            String name = tsg.getName();
+            if (name.contains(query)) {
+                pgrSearched.setText(name);
+                String dna = tsg.getDna();
+                for (KVS kvs : this.kvsList) {
+                    String dnaOfMother = kvs.getDnaOfMother();
+                    if (dnaOfMother.equals(dna)) {
+                        tsList.add(kvs);
                     }
                 }
             }
@@ -239,7 +328,11 @@ public class MainActivity extends AppCompatActivity {
         } else if(id == R.id.upload_data){
             uploadData();
             return true;
-        }else{
+        }else if(id == R.id.generate_admin_key){
+            Intent intent = new Intent(MainActivity.this, AdminActivity.class);
+            startActivity(intent);
+            return true;
+        } else{
             onBackPressed();
             return true;
         }
@@ -252,6 +345,26 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void sync()
+    {
+        PGRDatabase pgrDb = new PGRDatabase(MainActivity.this,
+                "pgrs.db", null, 1);
+        List<PGR> pgrs = pgrDb.getPGRs();
+
+        TSDatabase tsDb = new TSDatabase(MainActivity.this,
+                "tss.db", null, 1);
+        List<TS> ts = tsDb.getTss();
+
+        TSGDatabase tsgDb = new TSGDatabase(MainActivity.this,
+                "tsg.db", null, 1);
+        List<TSG> tsgs = tsgDb.getTSGs();
+
+        KVSDatabase kvsDb = new KVSDatabase(MainActivity.this,
+                "kvs.db", null, 1);
+        List<KVS> kvs = kvsDb.getKVSs();
+
+        //TODO
+    }
     private void writeToFile() {
         StringBuilder data = new StringBuilder();
         for(PGR pgr: pgrList)
@@ -315,7 +428,7 @@ public class MainActivity extends AppCompatActivity {
             shareIntent.putExtra(Intent.EXTRA_TEXT, data.toString());
             Intent intent = Intent.createChooser(shareIntent, getResources().getString(R.string.shareWith));
             startActivity(intent);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
@@ -423,10 +536,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
-        objectList = new ArrayList<>();
+        List<Object> objectList = new ArrayList<>();
 
         list = new ArrayList<>();
         pgrList = new ArrayList<>();
+
+        tsgList = new ArrayList<>();
+        kvsList = new ArrayList<>();
 
         pgrSearched = findViewById(R.id.pgr_searched);
 
@@ -438,19 +554,42 @@ public class MainActivity extends AppCompatActivity {
                 "tss.db", null, 1);
         List<TS> ts = tsDb.getTss();
 
+
+        tsgDb = new TSGDatabase(MainActivity.this,
+                "tsg.db", null, 1);
+        List<TSG> tsgs = tsgDb.getTSGs();
+
+        KVSDatabase kvsDb = new KVSDatabase(MainActivity.this,
+                "kvs.db", null, 1);
+        List<KVS> kvs = kvsDb.getKVSs();
+
         TextView pgrCounter = findViewById(R.id.pgr_count);
         TextView tsCounter = findViewById(R.id.ts_count);
+        TextView tsgCounter = findViewById(R.id.tsg_count);
+        TextView kvsCounter = findViewById(R.id.kvs_count);
+
         String pc = getResources().getString(R.string.pgr_count) + ": " + pgrDb.count();
         pgrCounter.setText(pc);
         String tc = getResources().getString(R.string.ts_count) + ": " + tsDb.count();
         tsCounter.setText(tc);
 
+        String tsgc = getResources().getString(R.string.tsg_count) + ": " + tsgDb.count();
+        tsgCounter.setText(tsgc);
+        String kvsc = getResources().getString(R.string.kvs_count) + ": " + kvsDb.count();
+        kvsCounter.setText(kvsc);
+
         pgrList.addAll(pgrs);
         list.addAll(ts);
+
+        tsgList.addAll(tsgs);
+        kvsList.addAll(kvs);
 
         objectList.clear();
         objectList.addAll(pgrList);
         objectList.addAll(list);
+
+        objectList.addAll(tsgList);
+        objectList.addAll(kvsList);
 
         adapter.setObjectList(objectList);
     }

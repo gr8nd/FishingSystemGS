@@ -5,49 +5,50 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mustapha.fishingsystemgs.R;
+import com.mustapha.fishingsystemgs.adapters.ViewTSGAdapter;
+import com.mustapha.fishingsystemgs.classes.KVS;
+import com.mustapha.fishingsystemgs.classes.TSG;
+import com.mustapha.fishingsystemgs.databases.KVSDatabase;
+import com.mustapha.fishingsystemgs.databases.TSGDatabase;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
-
-import com.mustapha.fishingsystemgs.R;
-import com.mustapha.fishingsystemgs.adapters.ViewPGRAdapter;
-import com.mustapha.fishingsystemgs.classes.PGR;
-
-import com.mustapha.fishingsystemgs.classes.TS;
-import com.mustapha.fishingsystemgs.databases.PGRDatabase;
-import com.mustapha.fishingsystemgs.databases.TSDatabase;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewPGRActivity extends AppCompatActivity {
-    private List<PGR> pgrs;
-    private List<TS> tsList;
-    private ViewPGRAdapter adapter;
+public class ViewTSGActivity extends AppCompatActivity {
+
+    private List<TSG> tsgList;
+    private List<KVS> kvsList;
+
+    private ViewTSGAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_pgractivity);
+        setContentView(R.layout.activity_view_tsg_activity);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        PGRDatabase pgrDb = new PGRDatabase(ViewPGRActivity.this,
-                "pgrs.db", null, 1);
-        pgrs = pgrDb.getPGRs();
+        TSGDatabase pgrDb = new TSGDatabase(this,
+                "tsg.db", null, 1);
+        tsgList = pgrDb.getTSGs();
 
-        TSDatabase tsDatabase = new TSDatabase(ViewPGRActivity.this,
-                "tss.db", null, 1);
-        tsList = tsDatabase.getTss();
+        KVSDatabase kvsDatabase = new KVSDatabase(this,
+                "kvs.db", null, 1);
+        kvsList = kvsDatabase.getKVSs();
 
-        adapter = new ViewPGRAdapter(this);
-        adapter.setPGR(pgrs);
+        adapter = new ViewTSGAdapter(this);
+        adapter.setTSG(tsgList);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ViewPGRActivity.this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -62,12 +63,13 @@ public class ViewPGRActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
                 query = query.trim().replace(" ", "");
-                filterPGR(query);
+                filterTSG(query);
 
                 return true;
             }
         });
     }
+
     @Override
     public void onBackPressed() {
         finish();
@@ -81,23 +83,21 @@ public class ViewPGRActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void filterPGR(String query)
+    private void filterTSG(String query)
     {
-        List<PGR> pgrList = new ArrayList<>();
-        for (PGR pgr : this.pgrs) {
+        List<TSG> pgrList = new ArrayList<>();
+        for (TSG pgr : this.tsgList) {
             String name = pgr.getName();
-            String s = pgr.getFirstDecimalNumber() + "-" + pgr.getSecondDecimalNumber();
-            if (name.contains(query) || s.contains(query)) {
+            if (name.contains(query)) {
                 pgrList.add(pgr);
             }
         }
 
-        for (TS ts : this.tsList) {
-            if (ts.getName().contains(query) ||
-                    ts.getTsName().contains(query)) {
-                for (PGR pgr : this.pgrs) {
-                    if (pgr.getDna().contains(ts.getDnaOfMother())) {
-                        pgrList.add(pgr);
+        for (KVS kvs : this.kvsList) {
+            if (kvs.getName().contains(query)) {
+                for (TSG tsg : this.tsgList) {
+                    if (tsg.getDna().contains(kvs.getDnaOfMother())) {
+                        pgrList.add(tsg);
                     }
                 }
             }
