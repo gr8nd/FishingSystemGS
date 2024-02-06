@@ -1,13 +1,9 @@
 package com.mustapha.fishingsystemgs.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mustapha.fishingsystemgs.R;
@@ -93,23 +89,21 @@ public class AdminActivity extends AppCompatActivity {
             String tokenKey = token.getText().toString();
             if(!tokenKey.equals(getResources().getString(R.string.token_will_appear_here)))
             {
-                copy.setVisibility(View.VISIBLE);
-                share.setVisibility(View.VISIBLE);
                 DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
                 Admin admin = new Admin(tokenKey, "");
-                adminsRef.child(tokenKey).setValue(admin).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful())
-                        {
-                            AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                                    .setMessage("Token has been authorized and submitted to the cloud, you can copy and share as you wish.")
-                                    .setCancelable(true)
-                                    .setPositiveButton("Ok", (dialogInterface, i) -> {
-                                    })
-                                    .create();
-                            dialog.show();
-                        }
+                adminsRef.child(tokenKey).setValue(admin).addOnCompleteListener(task -> {
+                    if(task.isSuccessful())
+                    {
+                        AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
+                                .setMessage("Token has been authorized and submitted to the cloud, you can copy and share as you wish.")
+                                .setCancelable(true)
+                                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                })
+                                .create();
+                        dialog.show();
+
+                        copy.setVisibility(View.VISIBLE);
+                        share.setVisibility(View.VISIBLE);
                     }
                 });
 

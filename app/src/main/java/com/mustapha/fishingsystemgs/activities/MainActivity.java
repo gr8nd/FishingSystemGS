@@ -27,7 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.google.firebase.FirebaseApp;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -368,6 +368,7 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem adminIcon = menu.findItem(R.id.admin_panel);
+
         DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
         adminsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -378,6 +379,7 @@ public class MainActivity extends AppCompatActivity {
                     if(admin != null && admin.getId().equals(loadAdminKey()))
                     {
                         adminIcon.setVisible(true);
+                        break;
                     }
                 }
             }
