@@ -69,7 +69,7 @@ public class AdminActivity extends AppCompatActivity {
                 //TODO
 
                 AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                        .setMessage("Token has been submitted and authorized, you can copy and share it as you wish.")
+                        .setMessage("Token has been submitted and authorized, you can copy and share as you wish.")
                         .setCancelable(true)
                         .setPositiveButton("Ok", (dialogInterface, i) -> {
                         })

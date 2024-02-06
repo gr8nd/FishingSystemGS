@@ -135,22 +135,34 @@ public class MainActivity extends AppCompatActivity {
             try {
 
                 String name = tsgEdit.getText().toString().trim().replace(" ", "");
-                String dna = UUID.randomUUID().toString();;
-                TSG tsg = new TSG(name, dna);
-                TSGDatabase tsgDatabase = new TSGDatabase(this,
-                        "tsg.db", null, 1);
-                tsgDatabase.insert(tsg);
-                AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setMessage("Your TSG has been successfully stored.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            relativeLayout.setVisibility(View.GONE);
-                            relativeLayout2.setVisibility(View.GONE);
-                            addPGRBtn.setVisibility(View.VISIBLE);
-                            addTSGBtn.setVisibility(View.VISIBLE);
-                        })
-                        .create();
-                dialog.show();
+                if(!name.isEmpty())
+                {
+                    String dna = UUID.randomUUID().toString();;
+                    TSG tsg = new TSG(name, dna);
+                    TSGDatabase tsgDatabase = new TSGDatabase(this,
+                            "tsg.db", null, 1);
+                    tsgDatabase.insert(tsg);
+                    AlertDialog dialog = new AlertDialog.Builder(this)
+                            .setMessage("Your TSG has been successfully stored.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                relativeLayout.setVisibility(View.GONE);
+                                relativeLayout2.setVisibility(View.GONE);
+                                addPGRBtn.setVisibility(View.VISIBLE);
+                                addTSGBtn.setVisibility(View.VISIBLE);
+                            })
+                            .create();
+                    dialog.show();
+                }else {
+                    AlertDialog dialog = new AlertDialog.Builder(this)
+                            .setMessage("Please type TSG name and then click on the Add button.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            })
+                            .create();
+                    dialog.show();
+                }
+
             }catch (Exception ignored)
             {
                 AlertDialog dialog = new AlertDialog.Builder(this)

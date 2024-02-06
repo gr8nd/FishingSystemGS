@@ -36,15 +36,15 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_ts_recycler,
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_kvs_recycler,
                 parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        KVS ts = kvsList.get(position);
-        holder.name.setText(ts.getName());
+        KVS kvs = kvsList.get(position);
+        holder.name.setText(kvs.getName());
         String n = "(" + (position + 1) + ")";
         holder.number.setText(n);
 
@@ -56,7 +56,7 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
                         kvsList.remove(position);
                         KVSDatabase kvsDatabase = new KVSDatabase(context,
                                 "kvs.db", null, 1);
-                        kvsDatabase.delete(ts.getDnaOfMother());
+                        kvsDatabase.delete(kvs.getDnaOfMother());
                         notifyItemRemoved(position);
                     })
                     .create();
@@ -64,18 +64,19 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
         });
 
         holder.copy.setOnClickListener(view -> {
-            copy(ts.getName());
+            copy(kvs.getName());
             //TODO
         });
 
         holder.edit.setOnClickListener(view -> {
             holder.relativeLayout.setVisibility(View.VISIBLE);
+            holder.KVSEdit.setText(kvs.getName());
             holder.edit.setVisibility(View.GONE);
-            holder.name.setText(ts.getName());
+            holder.name.setText(kvs.getName());
         });
 
 
-        holder.add.setOnClickListener(view -> {
+        holder.editBtn.setOnClickListener(view -> {
             try {
                 holder.relativeLayout.setVisibility(View.GONE);
                 holder.edit.setVisibility(View.VISIBLE);
@@ -92,8 +93,8 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
                 }else {
                     KVSDatabase tsDb = new KVSDatabase(context,
                             "kvs.db", null, 1);
-                    KVS ts1 = new KVS(s1,  ts.getDnaOfMother(), ts.getId());
-                    tsDb.update(ts.getDnaOfMother(), ts1);
+                    KVS ts1 = new KVS(s1,  kvs.getDnaOfMother(), kvs.getId());
+                    tsDb.update(kvs.getDnaOfMother(), ts1);
                     kvsList.remove(position);
                     kvsList.add(position, ts1);
                     notifyItemChanged(position);
@@ -109,7 +110,7 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
             }catch (Exception ignored)
             {
                 AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Please first type the KVS name and click on the Add button.")
+                        .setMessage("Please first type the KVS name and click on the Edit button.")
                         .setCancelable(true)
                         .setPositiveButton("Ok", (dialogInterface, i) -> {
                         })
@@ -158,7 +159,7 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
         private final EditText KVSEdit;
 
         private final RelativeLayout relativeLayout;
-        private final Button add;
+        private final Button editBtn;
 
         ViewHolder(View view) {
             super(view);
@@ -167,7 +168,7 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
             delete =view.findViewById(R.id.delete);
             edit = view.findViewById(R.id.edit);
             copy = view.findViewById(R.id.copy);
-            add = view.findViewById(R.id.add_tsg2);
+            editBtn = view.findViewById(R.id.edit_kvs);
             KVSEdit = view.findViewById(R.id.kvs_edit);
             relativeLayout = view.findViewById(R.id.house2);
             number = view.findViewById(R.id.number);

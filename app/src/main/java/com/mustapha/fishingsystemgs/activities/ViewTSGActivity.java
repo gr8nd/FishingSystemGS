@@ -36,9 +36,9 @@ public class ViewTSGActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        TSGDatabase pgrDb = new TSGDatabase(this,
+        TSGDatabase tsgDatabase = new TSGDatabase(this,
                 "tsg.db", null, 1);
-        tsgList = pgrDb.getTSGs();
+        tsgList = tsgDatabase.getTSGs();
 
         KVSDatabase kvsDatabase = new KVSDatabase(this,
                 "kvs.db", null, 1);
@@ -85,11 +85,11 @@ public class ViewTSGActivity extends AppCompatActivity {
 
     private void filterTSG(String query)
     {
-        List<TSG> pgrList = new ArrayList<>();
-        for (TSG pgr : this.tsgList) {
-            String name = pgr.getName();
+        List<TSG> tsgArrayList = new ArrayList<>();
+        for (TSG tsg : this.tsgList) {
+            String name = tsg.getName();
             if (name.contains(query)) {
-                pgrList.add(pgr);
+                tsgArrayList.add(tsg);
             }
         }
 
@@ -97,12 +97,12 @@ public class ViewTSGActivity extends AppCompatActivity {
             if (kvs.getName().contains(query)) {
                 for (TSG tsg : this.tsgList) {
                     if (tsg.getDna().contains(kvs.getDnaOfMother())) {
-                        pgrList.add(tsg);
+                        tsgArrayList.add(tsg);
                     }
                 }
             }
         }
 
-        adapter.filter(pgrList);
+        adapter.filter(tsgArrayList);
     }
 }

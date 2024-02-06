@@ -41,7 +41,7 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_pgr_recycler,
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_tsg_recycler,
                 parent, false);
         return new ViewHolder(view);
     }
@@ -53,13 +53,6 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
         String n = "(" + (position + 1) + ")";
         holder.number.setText(n);
 
-        holder.addKVS.setOnClickListener(view -> {
-            holder.addKVS.setVisibility(View.GONE);
-            holder.relativeLayout.setVisibility(View.VISIBLE);
-            holder.tsgName.setText(context.getResources().getString(R.string.type_kvs));
-            holder.editBtn.setVisibility(View.GONE);
-            holder.add.setVisibility(View.VISIBLE);
-        });
 
         holder.delete.setOnClickListener(view -> {
             try {
@@ -68,9 +61,9 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
                         .setCancelable(true)
                         .setPositiveButton("Yes", (dialogInterface, i) -> {
                             tsgList.remove(position);
-                            TSGDatabase pgrDb = new TSGDatabase(context,
+                            TSGDatabase tsgDatabase = new TSGDatabase(context,
                                     "tsg.db", null, 1);
-                            pgrDb.delete(tsg.getDna());
+                            tsgDatabase.delete(tsg.getDna());
                             notifyItemRemoved(position);
                         })
                         .create();
@@ -88,13 +81,21 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
 
         holder.edit.setOnClickListener(view -> {
             holder.addKVS.setVisibility(View.GONE);
+            holder.relativeLayout.setVisibility(View.VISIBLE);
             holder.edit.setVisibility(View.GONE);
             holder.editBtn.setVisibility(View.VISIBLE);
             holder.add.setVisibility(View.GONE);
+            holder.tsgNameEdit.setText(tsg.getName());
             holder.tsgName.setText(context.getResources().getString(R.string.tsg_name));
         });
 
-
+        holder.addKVS.setOnClickListener(view -> {
+            holder.addKVS.setVisibility(View.GONE);
+            holder.relativeLayout.setVisibility(View.VISIBLE);
+            holder.tsgName.setText(context.getResources().getString(R.string.type_kvs));
+            holder.editBtn.setVisibility(View.GONE);
+            holder.add.setVisibility(View.VISIBLE);
+        });
 
         holder.editBtn.setOnClickListener(view -> {
             try {
@@ -212,7 +213,7 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
             super(view);
 
             name = view.findViewById(R.id.name);
-            addKVS =view.findViewById(R.id.add_kvs);
+            addKVS = view.findViewById(R.id.add_kvs_btn);
             number = view.findViewById(R.id.number);
             add = view.findViewById(R.id.add);
             delete = view.findViewById(R.id.delete);
