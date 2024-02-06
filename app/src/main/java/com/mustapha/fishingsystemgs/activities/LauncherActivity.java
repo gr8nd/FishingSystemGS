@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -36,6 +37,9 @@ public class LauncherActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.relativeLayout);
         EditText adminKeyEdit = findViewById(R.id.admin_key_edit);
         Button continueBtn = findViewById(R.id.go_on);
+
+        ProgressBar progressBar = findViewById(R.id.progress_bar);
+
 
 
         if(loadAdminKey() != null) {
@@ -58,6 +62,7 @@ public class LauncherActivity extends AppCompatActivity {
                     if(!isAdmin)
                     {
                         relativeLayout.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
                 @Override
@@ -69,6 +74,7 @@ public class LauncherActivity extends AppCompatActivity {
 
 
           continueBtn.setOnClickListener(view -> {
+              progressBar.setVisibility(View.VISIBLE);
               String key = adminKeyEdit.getText().toString().trim();
               DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
             adminsRef.addValueEventListener(new ValueEventListener() {
@@ -97,10 +103,12 @@ public class LauncherActivity extends AppCompatActivity {
                                 .create();
                         dialog.show();
                         relativeLayout.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
 
                     }else {
                         Toast.makeText(LauncherActivity.this,
                                 "Your admin key has been authenticated.", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
                 @Override
