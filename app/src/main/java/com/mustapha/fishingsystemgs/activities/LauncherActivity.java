@@ -39,20 +39,20 @@ public class LauncherActivity extends AppCompatActivity {
 
         continueBtn.setOnClickListener(view -> {
             String key = adminKeyEdit.getText().toString().trim();
-            if(loadAdminKey().equals(key))
+            if(loadAdminKey() != null && loadAdminKey().equals(key))
             {
                 Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
                 startActivity(intent);
-            }else if(loadAdminKey() == null) {
-                  relativeLayout.setVisibility(View.VISIBLE);
-                  DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
+            }else if(loadAdminKey() != null) {
+                 // relativeLayout.setVisibility(View.VISIBLE);
+                  //DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
         //        adminsRef.addValueEventListener(new ValueEventListener() {
         //            @Override
         //            public void onDataChange(@NonNull DataSnapshot snapshot) {
         //                for(DataSnapshot dataSnapshot: snapshot.getChildren())
         //                {
         //                    Admin admin = dataSnapshot.getValue(Admin.class);
-        //                    if(admin != null && admin.getId().equal(key)
+        //                    if(admin != null && admin.getId().equals(key)
         //                    {
                                   //saveAdminKey(key);
         //                        Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
