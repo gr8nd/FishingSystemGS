@@ -43,6 +43,7 @@ public class LauncherActivity extends AppCompatActivity {
             adminsRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean isAdmin = false;
                     for(DataSnapshot dataSnapshot: snapshot.getChildren())
                     {
                         Admin admin = dataSnapshot.getValue(Admin.class);
@@ -50,8 +51,13 @@ public class LauncherActivity extends AppCompatActivity {
                         {
                             Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
                             startActivity(intent);
+                            isAdmin = true;
                             finish();
                         }
+                    }
+                    if(!isAdmin)
+                    {
+                        relativeLayout.setVisibility(View.VISIBLE);
                     }
                 }
                 @Override
@@ -68,7 +74,7 @@ public class LauncherActivity extends AppCompatActivity {
             adminsRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    boolean success = false;
+                    boolean isAdmin = false;
                     for(DataSnapshot dataSnapshot: snapshot.getChildren())
                     {
                         Admin admin = dataSnapshot.getValue(Admin.class);
@@ -77,11 +83,11 @@ public class LauncherActivity extends AppCompatActivity {
                             saveAdminKey(key);
                             Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
                             startActivity(intent);
-                            success = true;
+                            isAdmin = true;
                             finish();
                         }
                     }
-                    if(!success)
+                    if(!isAdmin)
                     {
                         AlertDialog dialog = new AlertDialog.Builder(LauncherActivity.this)
                                 .setMessage("Error! Wrong admin key detected.")
@@ -90,6 +96,8 @@ public class LauncherActivity extends AppCompatActivity {
                                 })
                                 .create();
                         dialog.show();
+                        relativeLayout.setVisibility(View.VISIBLE);
+
                     }else {
                         Toast.makeText(LauncherActivity.this,
                                 "Your admin key has been authenticated.", Toast.LENGTH_LONG).show();
@@ -101,7 +109,6 @@ public class LauncherActivity extends AppCompatActivity {
             });
         });
 
-        relativeLayout.setVisibility(View.VISIBLE);
 
     }
 
