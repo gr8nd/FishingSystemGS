@@ -46,7 +46,7 @@ public class LauncherActivity extends AppCompatActivity {
             }else if(loadAdminKey() == null) {
                   relativeLayout.setVisibility(View.VISIBLE);
                   DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
-        //        pickUpRef.addValueEventListener(new ValueEventListener() {
+        //        adminsRef.addValueEventListener(new ValueEventListener() {
         //            @Override
         //            public void onDataChange(@NonNull DataSnapshot snapshot) {
         //                for(DataSnapshot dataSnapshot: snapshot.getChildren())
