@@ -1,6 +1,7 @@
 package com.mustapha.fishingsystemgs.activities;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.mustapha.fishingsystemgs.R;
 
@@ -34,6 +35,8 @@ public class AdminActivity extends AppCompatActivity {
         TextView share = findViewById(R.id.share);
         Button generateToken = findViewById(R.id.generate);
 
+        Button authorize = findViewById(R.id.submit);
+
         copy.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) AdminActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("Copy TS", token.getText().toString());
@@ -54,11 +57,35 @@ public class AdminActivity extends AppCompatActivity {
         });
 
         generateToken.setOnClickListener(view -> {
-            copy.setVisibility(View.VISIBLE);
-            share.setVisibility(View.VISIBLE);
             String secretToken = UUID.randomUUID().toString();
             token.setText(secretToken);
-            //TODO
+        });
+
+        authorize.setOnClickListener(view -> {
+            if(!token.getText().toString().equals(getResources().getString(R.string.token_will_appear_here)))
+            {
+                copy.setVisibility(View.VISIBLE);
+                share.setVisibility(View.VISIBLE);
+                //TODO
+
+                AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
+                        .setMessage("Token has been submitted and authorized, you can copy and share it as you wish.")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        })
+                        .create();
+                dialog.show();
+            }else
+            {
+                AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
+                        .setMessage("Please generate token first.")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        })
+                        .create();
+                dialog.show();
+            }
+
         });
 
 
