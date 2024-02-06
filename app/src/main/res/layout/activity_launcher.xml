@@ -54,5 +54,17 @@
         android:id="@+id/progress_bar"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progress_bar"
+        android:id="@+id/connecting"
+        android:layout_centerInParent="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:text="@string/connecting_to_cloud_server"
+        />
+
 
 </RelativeLayout>

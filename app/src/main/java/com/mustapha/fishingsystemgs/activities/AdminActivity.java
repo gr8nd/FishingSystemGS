@@ -46,7 +46,7 @@ public class AdminActivity extends AppCompatActivity {
 
         removeAdmin.setOnClickListener(view -> {
             DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
-            adminsRef.child(adminToken.getText().toString()).setValue(null).addOnCompleteListener(task -> {
+            adminsRef.child(adminToken.getText().toString()).removeValue().addOnCompleteListener(task -> {
                 if(task.isSuccessful())
                 {
                     AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
