@@ -57,7 +57,7 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
         holder.delete.setOnClickListener(view -> {
             try {
                 AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Do you really want to delete this PGR?")
+                        .setMessage("Do you really want to delete this TSG?")
                         .setCancelable(true)
                         .setPositiveButton("Yes", (dialogInterface, i) -> {
                             tsgList.remove(position);
@@ -108,18 +108,42 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
                 TSG tsg1 = new TSG(name, dna);
                 TSGDatabase tsgDatabase = new TSGDatabase(context,
                         "tsg.db", null, 1);
-                tsgDatabase.update(tsg.getDna(), tsg1);
-                tsgList.remove(position);
-                tsgList.add(position, tsg1);
-                notifyItemChanged(position);
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Your TSG has been successfully edited.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            holder.edit.setVisibility(View.VISIBLE);
-                        })
-                        .create();
-                dialog.show();
+                boolean isDuplicate = false;
+                for (TSG t: tsgDatabase.getTSGs())
+                {
+                    if (t.getName().equals(tsg1.getName())) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+
+                if(!isDuplicate)
+                {
+                    tsgDatabase.update(tsg.getDna(), tsg1);
+                    tsgList.remove(position);
+                    tsgList.add(position, tsg1);
+                    notifyItemChanged(position);
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setMessage("Your TSG has been successfully edited.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                holder.edit.setVisibility(View.VISIBLE);
+                            })
+                            .create();
+                    dialog.show();
+                }else
+                {
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setMessage("The TSG already exists.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                holder.edit.setVisibility(View.VISIBLE);
+                            })
+                            .create();
+                    dialog.show();
+                }
+
+
             }catch (Exception ignored)
             {
                 AlertDialog dialog = new AlertDialog.Builder(context)

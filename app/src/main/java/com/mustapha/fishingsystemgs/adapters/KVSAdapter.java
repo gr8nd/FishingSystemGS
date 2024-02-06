@@ -136,17 +136,17 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
     public void copy(String text)
     {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Copy TS", text);
+        ClipData clip = ClipData.newPlainText("Copy TVS", text);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(context, "TS copied to clipboard", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "TVS copied to clipboard", Toast.LENGTH_LONG).show();
     }
 
     public void copyResult(String text)
     {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Copy New TS child", text);
+        ClipData clip = ClipData.newPlainText("Copy New TVS child", text);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(context, "New TS child copied to clipboard", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "New TVS child copied to clipboard", Toast.LENGTH_LONG).show();
     }
     public void filter(List<KVS> tsList) {
         this.kvsList = tsList;

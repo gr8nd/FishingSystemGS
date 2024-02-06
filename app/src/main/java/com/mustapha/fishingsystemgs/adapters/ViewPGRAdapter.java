@@ -138,19 +138,43 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                 PGR pgr2 = new PGR(name, firstDecimalNum, secondDecimalNum, thirdDecimalNum, dna);
                 PGRDatabase pgrDb = new PGRDatabase(context,
                         "pgrs.db", null, 1);
-                pgrDb.update(pgr.getDna(), pgr2);
-                pgrs.remove(position);
-                pgrs.add(position, pgr2);
-                notifyItemChanged(position);
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Your PGR has been successfully edited.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            holder.relativeLayout2.setVisibility(View.GONE);
-                            holder.edit.setVisibility(View.VISIBLE);
-                        })
-                        .create();
-                dialog.show();
+                boolean isDuplicate = false;
+                for (PGR p: pgrDb.getPGRs())
+                {
+                    if (p.getName().equals(pgr.getName())) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+
+                if(!isDuplicate)
+                {
+                    pgrDb.update(pgr.getDna(), pgr2);
+                    pgrs.remove(position);
+                    pgrs.add(position, pgr2);
+                    notifyItemChanged(position);
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setMessage("Your PGR has been successfully edited.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                holder.relativeLayout2.setVisibility(View.GONE);
+                                holder.edit.setVisibility(View.VISIBLE);
+                            })
+                            .create();
+                    dialog.show();
+                }else
+                {
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setMessage("The PGR already exists.")
+                            .setCancelable(true)
+                            .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                holder.relativeLayout2.setVisibility(View.GONE);
+                                holder.edit.setVisibility(View.VISIBLE);
+                            })
+                            .create();
+                    dialog.show();
+                }
+
             }catch (Exception ignored)
             {
                 AlertDialog dialog = new AlertDialog.Builder(context)

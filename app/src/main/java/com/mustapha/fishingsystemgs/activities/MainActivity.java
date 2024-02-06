@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     private List<KVS> kvsList;
 
     private PGRDatabase pgrDb;
-    private TSGDatabase tsgDb;
 
     private RelativeLayout relativeLayout, relativeLayout2;
     private Button addPGRBtn, addTSGBtn;
@@ -157,18 +156,45 @@ public class MainActivity extends AppCompatActivity {
                     TSG tsg = new TSG(name, dna);
                     TSGDatabase tsgDatabase = new TSGDatabase(this,
                             "tsg.db", null, 1);
-                    tsgDatabase.insert(tsg);
-                    AlertDialog dialog = new AlertDialog.Builder(this)
-                            .setMessage("Your TSG has been successfully stored.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                                relativeLayout.setVisibility(View.GONE);
-                                relativeLayout2.setVisibility(View.GONE);
-                                addPGRBtn.setVisibility(View.VISIBLE);
-                                addTSGBtn.setVisibility(View.VISIBLE);
-                            })
-                            .create();
-                    dialog.show();
+
+                    boolean isDuplicate = false;
+                    for (TSG t: tsgDatabase.getTSGs())
+                    {
+                        if (tsg.getName().equals(t.getName())) {
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+
+                    if(!isDuplicate)
+                    {
+                        tsgDatabase.insert(tsg);
+                        AlertDialog dialog = new AlertDialog.Builder(this)
+                                .setMessage("Your TSG has been successfully stored.")
+                                .setCancelable(true)
+                                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                    relativeLayout.setVisibility(View.GONE);
+                                    relativeLayout2.setVisibility(View.GONE);
+                                    addPGRBtn.setVisibility(View.VISIBLE);
+                                    addTSGBtn.setVisibility(View.VISIBLE);
+                                })
+                                .create();
+                        dialog.show();
+                    }else
+                    {
+                        AlertDialog dialog = new AlertDialog.Builder(this)
+                                .setMessage("The TSG already exists.")
+                                .setCancelable(true)
+                                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                                    relativeLayout.setVisibility(View.GONE);
+                                    relativeLayout2.setVisibility(View.GONE);
+                                    addPGRBtn.setVisibility(View.VISIBLE);
+                                    addTSGBtn.setVisibility(View.VISIBLE);
+                                })
+                                .create();
+                        dialog.show();
+                    }
+
                 }else {
                     AlertDialog dialog = new AlertDialog.Builder(this)
                             .setMessage("Please type TSG name and then click on the Add button.")
@@ -177,6 +203,10 @@ public class MainActivity extends AppCompatActivity {
                             })
                             .create();
                     dialog.show();
+                    relativeLayout.setVisibility(View.GONE);
+                    relativeLayout2.setVisibility(View.GONE);
+                    addPGRBtn.setVisibility(View.VISIBLE);
+                    addTSGBtn.setVisibility(View.VISIBLE);
                 }
 
             }catch (Exception ignored)
@@ -204,8 +234,23 @@ public class MainActivity extends AppCompatActivity {
                 String name = s1 + "-" + s2 + " " + df.format(thirdDecimalNum);
                 String dna = UUID.randomUUID().toString();
                 PGR pgr = new PGR(name, firstDecimalNum, secondDecimalNum, thirdDecimalNum, dna);
-                pgrDb.insert(pgr);
-                displayAlert("Your new PGR has been successfully stored.");
+                boolean isDuplicate = false;
+                for (PGR p: pgrDb.getPGRs())
+                {
+                    if (p.getName().equals(pgr.getName())) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+
+                if(!isDuplicate)
+                {
+                    pgrDb.insert(pgr);
+                    displayAlert("Your new PGR has been successfully stored.");
+                }else
+                {
+                    displayAlert("The PGR already exists.");
+                }
             }catch (Exception ignored)
             {
                 displayAlert("Please type First Decimal first, then type the Second Decimal and then click on the Add button.");
@@ -711,7 +756,7 @@ public class MainActivity extends AppCompatActivity {
         List<TS> ts = tsDb.getTss();
 
 
-        tsgDb = new TSGDatabase(MainActivity.this,
+        TSGDatabase tsgDb = new TSGDatabase(MainActivity.this,
                 "tsg.db", null, 1);
         List<TSG> tsgs = tsgDb.getTSGs();
 
