@@ -462,7 +462,11 @@ public class MainActivity extends AppCompatActivity {
                     PGR pgr = dataSnapshot.getValue(PGR.class);
                     if(pgr != null && pgr.getDna() != null)
                     {
-                        pgrDb.insert(pgr);
+                        int i = pgrDb.update(pgr.getDna(), pgr);
+                        if(i<0)
+                        {
+                            pgrDb.insert(pgr);
+                        }
                     }
                 }
             }
@@ -480,7 +484,11 @@ public class MainActivity extends AppCompatActivity {
                     TS ts = dataSnapshot.getValue(TS.class);
                     if(ts != null && ts.getDnaOfMother() != null)
                     {
-                        tssDb.insert(ts);
+                        int i = tssDb.update(ts.getId(), ts);
+                        if(i<0)
+                        {
+                            tssDb.insert(ts);
+                        }
                     }
                 }
             }
@@ -497,7 +505,11 @@ public class MainActivity extends AppCompatActivity {
                     TSG tsg = dataSnapshot.getValue(TSG.class);
                     if(tsg != null && tsg.getDna() != null)
                     {
-                        tsgsDb.insert(tsg);
+                        int i = tsgsDb.update(tsg.getDna(), tsg);
+                        if(i<0)
+                        {
+                            tsgsDb.insert(tsg);
+                        }
                     }
                 }
             }
@@ -514,7 +526,11 @@ public class MainActivity extends AppCompatActivity {
                     KVS kvs = dataSnapshot.getValue(KVS.class);
                     if(kvs != null && kvs.getDnaOfMother() != null)
                     {
-                        kvssDb.insert(kvs);
+                        int i = kvssDb.update(kvs.getId(), kvs);
+                        if(i<0)
+                        {
+                            kvssDb.insert(kvs);
+                        }
                     }
                 }
             }
