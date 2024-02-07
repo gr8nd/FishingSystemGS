@@ -466,6 +466,8 @@ public class MainActivity extends AppCompatActivity {
                         if(i<0)
                         {
                             pgrDb.insert(pgr);
+                        }else {
+                            pgrDb.insert(pgr);
                         }
                     }
                 }
@@ -488,6 +490,8 @@ public class MainActivity extends AppCompatActivity {
                         if(i<0)
                         {
                             tssDb.insert(ts);
+                        }else {
+                            tssDb.insert(ts);
                         }
                     }
                 }
@@ -509,6 +513,8 @@ public class MainActivity extends AppCompatActivity {
                         if(i<0)
                         {
                             tsgsDb.insert(tsg);
+                        }else {
+                            tsgsDb.insert(tsg);
                         }
                     }
                 }
@@ -529,6 +535,8 @@ public class MainActivity extends AppCompatActivity {
                         int i = kvssDb.update(kvs.getId(), kvs);
                         if(i<0)
                         {
+                            kvssDb.insert(kvs);
+                        }else {
                             kvssDb.insert(kvs);
                         }
                     }
