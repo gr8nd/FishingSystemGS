@@ -44,6 +44,14 @@ public class LauncherActivity extends AppCompatActivity {
         TextView connecting = findViewById(R.id.connecting);
         ImageView cloudImage = findViewById(R.id.cloud_icon);
 
+        if(loadAdminKey() == null)
+        {
+            relativeLayout.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            connecting.setVisibility(View.GONE);
+            cloudImage.setVisibility(View.GONE);
+        }
+
         if(loadAdminKey() != null) {
             DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
             adminsRef.addValueEventListener(new ValueEventListener() {
