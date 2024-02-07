@@ -96,6 +96,15 @@ public class AdminActivity extends AppCompatActivity {
         generateToken.setOnClickListener(view -> {
             String secretToken = UUID.randomUUID().toString();
             token.setText(secretToken);
+            copy.setVisibility(View.VISIBLE);
+            share.setVisibility(View.VISIBLE);
+            AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
+                    .setMessage("Copy the token and authorize it by clicking on the Authorize button below.")
+                    .setCancelable(true)
+                    .setPositiveButton("Ok", (dialogInterface, i) -> {
+                    })
+                    .create();
+            dialog.show();
         });
 
         authorize.setOnClickListener(view -> {
@@ -108,15 +117,12 @@ public class AdminActivity extends AppCompatActivity {
                     if(task.isSuccessful())
                     {
                         AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                                .setMessage("Token has been authorized and submitted to the cloud, you can copy and share as you wish.")
+                                .setMessage("Token has been authorized and submitted to the cloud.")
                                 .setCancelable(true)
                                 .setPositiveButton("Ok", (dialogInterface, i) -> {
                                 })
                                 .create();
                         dialog.show();
-
-                        copy.setVisibility(View.VISIBLE);
-                        share.setVisibility(View.VISIBLE);
                     }
                 });
 
