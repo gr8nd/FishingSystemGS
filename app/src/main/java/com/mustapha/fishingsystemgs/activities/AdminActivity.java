@@ -99,7 +99,7 @@ public class AdminActivity extends AppCompatActivity {
             copy.setVisibility(View.VISIBLE);
             share.setVisibility(View.VISIBLE);
             AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                    .setMessage("Copy the token and authorize it by clicking on the Authorize button below.")
+                    .setMessage("First copy the token and authorize it by clicking on the Authorize button below. You can share the token with anyone you want to make admin.")
                     .setCancelable(true)
                     .setPositiveButton("Ok", (dialogInterface, i) -> {
                     })
