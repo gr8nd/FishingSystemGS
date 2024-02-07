@@ -46,10 +46,19 @@
             />
     </RelativeLayout>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cloud_icon"
+        android:src="@drawable/baseline_cloud_upload_24"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/connecting_to_cloud" />
+
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_below="@id/cloud_icon"
         android:indeterminate="true"
         android:id="@+id/progress_bar"
         />

@@ -413,7 +413,6 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem adminIcon = menu.findItem(R.id.admin_panel);
-
         DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
         adminsRef.addValueEventListener(new ValueEventListener() {
             @Override

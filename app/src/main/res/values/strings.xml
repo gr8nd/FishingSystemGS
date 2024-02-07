@@ -50,4 +50,5 @@
     <string name="delete_admin">To remove an admin, enter the admin\'s token in the text box below and click on the remove the admin button.</string>
     <string name="remove_admin">Remove the Admin</string>
     <string name="connecting_to_cloud_server">Connecting to cloud server...</string>
+    <string name="connecting_to_cloud">Connecting to cloud</string>
 </resources>

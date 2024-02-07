@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,8 +42,7 @@ public class LauncherActivity extends AppCompatActivity {
 
         ProgressBar progressBar = findViewById(R.id.progress_bar);
         TextView connecting = findViewById(R.id.connecting);
-
-
+        ImageView cloudImage = findViewById(R.id.cloud_icon);
 
         if(loadAdminKey() != null) {
             DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
@@ -66,6 +66,7 @@ public class LauncherActivity extends AppCompatActivity {
                         relativeLayout.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                         connecting.setVisibility(View.GONE);
+                        cloudImage.setVisibility(View.GONE);
                     }
                 }
                 @Override
@@ -79,6 +80,7 @@ public class LauncherActivity extends AppCompatActivity {
           continueBtn.setOnClickListener(view -> {
               progressBar.setVisibility(View.VISIBLE);
               connecting.setVisibility(View.VISIBLE);
+              cloudImage.setVisibility(View.VISIBLE);
               String key = adminKeyEdit.getText().toString().trim();
               DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
             adminsRef.addValueEventListener(new ValueEventListener() {
@@ -109,12 +111,14 @@ public class LauncherActivity extends AppCompatActivity {
                         relativeLayout.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                         connecting.setVisibility(View.GONE);
+                        cloudImage.setVisibility(View.GONE);
 
                     }else {
                         Toast.makeText(LauncherActivity.this,
                                 "Your admin key has been authenticated.", Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                         connecting.setVisibility(View.GONE);
+                        cloudImage.setVisibility(View.GONE);
                     }
                 }
                 @Override

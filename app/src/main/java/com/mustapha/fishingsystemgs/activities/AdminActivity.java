@@ -45,19 +45,32 @@ public class AdminActivity extends AppCompatActivity {
         Button authorize = findViewById(R.id.submit);
 
         removeAdmin.setOnClickListener(view -> {
-            DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
-            adminsRef.child(adminToken.getText().toString()).removeValue().addOnCompleteListener(task -> {
-                if(task.isSuccessful())
-                {
-                    AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                            .setMessage("The Admin has been removed.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
-                }
-            });
+            String tokeKey = adminToken.getText().toString().trim();
+            if(!tokeKey.isEmpty())
+            {
+                DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
+                adminsRef.child(tokeKey).removeValue().addOnCompleteListener(task -> {
+                    if(task.isSuccessful())
+                    {
+                        AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
+                                .setMessage("The task has been successfully submitted to the cloud. The admin will be removed if the token is a valid admin token.")
+                                .setCancelable(true)
+                                .setPositiveButton("Close", (dialogInterface, i) -> {
+                                })
+                                .create();
+                        dialog.show();
+                    }
+                });
+            }else {
+                AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
+                        .setMessage("First type or copy/paste the admin token key in the text box.")
+                        .setCancelable(true)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                        })
+                        .create();
+                dialog.show();
+            }
+
 
         });
 
