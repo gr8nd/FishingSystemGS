@@ -68,7 +68,7 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
                         })
                         .create();
                 dialog.show();
-            }catch (Exception e)
+            }catch (Exception ignored)
             {
 
             }
@@ -76,7 +76,6 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
 
         holder.copy.setOnClickListener(view -> {
             copy(tsg.getName());
-            //TODO
         });
 
         holder.edit.setOnClickListener(view -> {
@@ -146,13 +145,7 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
 
             }catch (Exception ignored)
             {
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Please type TSG name and then click on the Add button.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
+                alert("Please type TSG name and then click on the Add button.");
             }
 
         });
@@ -165,43 +158,34 @@ public class ViewTSGAdapter extends RecyclerView.Adapter<ViewTSGAdapter.ViewHold
                 String s1 = holder.tsgNameEdit.getText().toString().replace(" ", "");
                 if(s1.isEmpty())
                 {
-                    AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setMessage("Please first type the KVS name and click on the Add button.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Please first type the KVS name and click on the Add button.");
                 }else {
                     KVSDatabase tsDb = new KVSDatabase(context,
                             "kvs.db", null, 1);
                     String id = UUID.randomUUID().toString();
                     KVS ts = new KVS(s1, tsg.getDna(), id);
                     tsDb.insert(ts);
-                    AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setMessage("Your new KVS has been successfully stored.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Your new KVS has been successfully stored.");
                 }
 
             }catch (Exception ignored)
             {
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Please first type the KVS name and click on the Add button.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
+                alert("Please first type the KVS name and click on the Add button.");
             }
         });
 
     }
 
-
+    private void alert(String message)
+    {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                })
+                .create();
+        dialog.show();
+    }
     @Override
     public int getItemCount() {
         return tsgList.size();

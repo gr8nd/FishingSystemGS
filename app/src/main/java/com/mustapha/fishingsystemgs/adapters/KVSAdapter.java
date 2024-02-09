@@ -83,13 +83,7 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
                 String s1 = holder.KVSEdit.getText().toString().replace(" ", "").trim();
                 if(s1.isEmpty())
                 {
-                    AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setMessage("Please first type the KVS name and click on the Add button.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Please first type the KVS name and click on the Add button.");
                 }else {
                     KVSDatabase tsDb = new KVSDatabase(context,
                             "kvs.db", null, 1);
@@ -98,31 +92,27 @@ public class KVSAdapter extends RecyclerView.Adapter<KVSAdapter.ViewHolder> {
                     kvsList.remove(position);
                     kvsList.add(position, ts1);
                     notifyItemChanged(position);
-                    AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setMessage("Your KVS has been successfully edited.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Your KVS has been successfully edited.");
                 }
 
             }catch (Exception ignored)
             {
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Please first type the KVS name and click on the Edit button.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
+                alert("Please first type the KVS name and click on the Edit button.");
             }
         });
 
-
     }
 
-
+    private void alert(String message)
+    {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                })
+                .create();
+        dialog.show();
+    }
     @Override
     public int getItemCount() {
         return kvsList.size();

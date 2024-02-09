@@ -8,8 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -105,9 +108,6 @@ public class MainActivity extends AppCompatActivity {
 
         initialise();
 
-        syncFromOffline();
-
-
         EditText firstDecimal = findViewById(R.id.firstDecimalEdit);
         EditText secondDecimal = findViewById(R.id.secondDecimalEdit);
         TextView formedMother = findViewById(R.id.third_decimal);
@@ -196,13 +196,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }else {
-                    AlertDialog dialog = new AlertDialog.Builder(this)
-                            .setMessage("Please type TSG name and then click on the Add button.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Please type TSG name and then click on the Add button.");
                     relativeLayout.setVisibility(View.GONE);
                     relativeLayout2.setVisibility(View.GONE);
                     addPGRBtn.setVisibility(View.VISIBLE);
@@ -211,13 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
             }catch (Exception ignored)
             {
-                AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setMessage("Please type TSG name and then click on the Add button.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
+               alert("Please type TSG name and then click on the Add button.");
             }
 
         });
@@ -246,14 +234,14 @@ public class MainActivity extends AppCompatActivity {
                 if(!isDuplicate)
                 {
                     pgrDb.insert(pgr);
-                    displayAlert("Your new PGR has been successfully stored.");
+                    alert("Your new PGR has been successfully stored.");
                 }else
                 {
-                    displayAlert("The PGR already exists.");
+                    alert("The PGR already exists.");
                 }
             }catch (Exception ignored)
             {
-                displayAlert("Please type First Decimal first, then type the Second Decimal and then click on the Add button.");
+                alert("Please type First Decimal first, then type the Second Decimal and then click on the Add button.");
             }
             relativeLayout.setVisibility(View.GONE);
             relativeLayout2.setVisibility(View.GONE);
@@ -350,19 +338,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         adapter.updateList(tsList);
-    }
-
-    private void displayAlert(@Nullable String message) {
-        runOnUiThread(() -> {
-            AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setMessage(message)
-                    .setCancelable(true)
-                    .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        recreate();
-                    })
-                    .create();
-            dialog.show();
-        });
     }
 
     @Override
@@ -477,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        DatabaseReference tssRef = FirebaseDatabase.getInstance().getReference("tsgs");
+        DatabaseReference tssRef = FirebaseDatabase.getInstance().getReference("tss");
         tssRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -500,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        DatabaseReference tsgsRef = FirebaseDatabase.getInstance().getReference("pgrs");
+        DatabaseReference tsgsRef = FirebaseDatabase.getInstance().getReference("tsgs");
         tsgsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -523,7 +498,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvs");
+        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvss");
         kvsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -581,7 +556,7 @@ public class MainActivity extends AppCompatActivity {
         {
             tsgsRef.child(tsg.getDna()).setValue(tsg);
         }
-        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvs");
+        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvss");
         for (KVS kvs: kvss)
         {
             kvsRef.child(kvs.getId()).setValue(kvs);
@@ -649,7 +624,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, data.toString());
+            shareIntent.putExtra(Intent.EXTRA_TEXT, data);
             Intent intent = Intent.createChooser(shareIntent, getResources().getString(R.string.shareWith));
             startActivity(intent);
         } catch (Exception ignored) {
@@ -729,13 +704,7 @@ public class MainActivity extends AppCompatActivity {
                 } finally {
                     stream.flush();
                     stream.close();
-                    AlertDialog dialog = new AlertDialog.Builder(this)
-                            .setMessage("Your data has been downloaded successfully.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Your data has been downloaded successfully.");
                 }
             }catch (Exception e)
             {
@@ -745,9 +714,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-
         initialise();
-
+        syncFromOffline();
         super.onResume();
     }
 
@@ -808,7 +776,6 @@ public class MainActivity extends AppCompatActivity {
         tsgList.addAll(tsgs);
         kvsList.addAll(kvs);
 
-        objectList.clear();
         objectList.addAll(pgrList);
         objectList.addAll(list);
 
@@ -816,5 +783,17 @@ public class MainActivity extends AppCompatActivity {
         objectList.addAll(kvsList);
 
         adapter.setObjectList(objectList);
+
+    }
+
+    private void alert(String message)
+    {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                })
+                .create();
+        dialog.show();
     }
 }

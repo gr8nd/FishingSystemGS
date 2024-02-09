@@ -75,7 +75,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                         })
                         .create();
                 dialog.show();
-            }catch (Exception e)
+            }catch (Exception ignored)
             {
 
             }
@@ -97,14 +97,10 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         holder.secondDecimal.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 try {
@@ -177,13 +173,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
 
             }catch (Exception ignored)
             {
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Please type First Decimal first, then type the Second Decimal and then click on the Add button.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
+                alert("Please type First Decimal first, then type the Second Decimal and then click on the Add button.");
             }
 
         });
@@ -191,14 +181,10 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         holder.tsNameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 String s1 = holder.tsNameEdit.getText().toString();
@@ -215,13 +201,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                 String s1 = holder.tsNameEdit.getText().toString().replace(" ", "");
                 if(s1.isEmpty())
                 {
-                    AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setMessage("Please first type the TS name and click on the Add button.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Please first type the TS name and click on the Add button.");
                 }else {
                     String s2 = s1 + " " + pgr.getThirdDecimalNumber();
                     TSDatabase tsDb = new TSDatabase(context,
@@ -229,30 +209,27 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                     String id = UUID.randomUUID().toString();
                     TS ts = new TS(s2, pgr.getThirdDecimalNumber(), pgr.getDna(), id, s1);
                     tsDb.insert(ts);
-                    AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setMessage("Your new TS has been successfully stored.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Your new TS has been successfully stored.");
                 }
 
             }catch (Exception ignored)
             {
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Please first type the TS name and click on the Add button.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
+                alert("Please first type the TS name and click on the Add button.");
             }
         });
 
     }
 
-
+    private void alert(String message)
+    {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                })
+                .create();
+        dialog.show();
+    }
     @Override
     public int getItemCount() {
         return pgrs.size();

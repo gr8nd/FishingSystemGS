@@ -69,12 +69,10 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
 
         holder.copy.setOnClickListener(view -> {
             copy(ts.getName());
-            //TODO
         });
 
         holder.copyChild.setOnClickListener(view -> {
             copyResult(result);
-            //TODO
         });
 
         holder.edit.setOnClickListener(view -> {
@@ -115,13 +113,7 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
                 String s1 = holder.tsNameEdit.getText().toString().replace(" ", "");
                 if(s1.isEmpty())
                 {
-                    AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setMessage("Please first type the TS name and click on the Add button.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Please first type the TS name and click on the Add button.");
                 }else {
                     String s2 = s1 + " " + ts.getThirdDecimalOfMother();
                     TSDatabase tsDb = new TSDatabase(context,
@@ -131,38 +123,22 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
                     tsList.remove(position);
                     tsList.add(position, ts1);
                     notifyItemChanged(position);
-                    AlertDialog dialog = new AlertDialog.Builder(context)
-                            .setMessage("Your TS has been successfully edited.")
-                            .setCancelable(true)
-                            .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            })
-                            .create();
-                    dialog.show();
+                    alert("Your TS has been successfully edited.");
                 }
 
             }catch (Exception ignored)
             {
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Please first type the TS name and click on the Add button.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
+                alert("Please first type the TS name and click on the Add button.");
             }
         });
 
         holder.tsNameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 String s1 = holder.tsNameEdit.getText().toString();
@@ -175,6 +151,16 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
 
     }
 
+    private void alert(String message)
+    {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                })
+                .create();
+        dialog.show();
+    }
 
     @Override
     public int getItemCount() {

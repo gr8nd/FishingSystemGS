@@ -13,6 +13,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,23 +54,11 @@ public class AdminActivity extends AppCompatActivity {
                 adminsRef.child(tokeKey).removeValue().addOnCompleteListener(task -> {
                     if(task.isSuccessful())
                     {
-                        AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                                .setMessage("The task has been successfully submitted to the cloud. The admin will be removed if the token is a valid admin token.")
-                                .setCancelable(true)
-                                .setPositiveButton("Close", (dialogInterface, i) -> {
-                                })
-                                .create();
-                        dialog.show();
+                        alert("The task has been successfully submitted to the cloud. The admin will be removed if the token is a valid admin token.");
                     }
                 });
             }else {
-                AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                        .setMessage("First type or copy/paste the admin token key in the text box.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
+                alert("First type or copy/paste the admin token key in the text box.");
             }
 
 
@@ -94,17 +84,17 @@ public class AdminActivity extends AppCompatActivity {
         });
 
         generateToken.setOnClickListener(view -> {
-            String secretToken = UUID.randomUUID().toString();
-            token.setText(secretToken);
-            copy.setVisibility(View.VISIBLE);
-            share.setVisibility(View.VISIBLE);
-            AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                    .setMessage("First copy the token and authorize it by clicking on the Authorize button below. You can share the token with anyone you want to make admin.")
-                    .setCancelable(true)
-                    .setPositiveButton("Ok", (dialogInterface, i) -> {
-                    })
-                    .create();
-            dialog.show();
+            if(isNetworkAvailable())
+            {
+                DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
+                String secretToken = adminsRef.push().getKey();//UUID.randomUUID().toString();
+                token.setText(secretToken);
+                copy.setVisibility(View.VISIBLE);
+                share.setVisibility(View.VISIBLE);
+                alert("Token generated successfully, to make someone and admin first copy the token and authorize it by clicking on the Authorize button below. You can share the token with anyone you want to make admin.");
+            }else {
+                alert("An internet connection is required, please connect to an internet and retry.");
+            }
         });
 
         authorize.setOnClickListener(view -> {
@@ -116,25 +106,13 @@ public class AdminActivity extends AppCompatActivity {
                 adminsRef.child(tokenKey).setValue(admin).addOnCompleteListener(task -> {
                     if(task.isSuccessful())
                     {
-                        AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                                .setMessage("Token has been authorized and submitted to the cloud.")
-                                .setCancelable(true)
-                                .setPositiveButton("Ok", (dialogInterface, i) -> {
-                                })
-                                .create();
-                        dialog.show();
+                        alert("Token has been authorized and submitted to the cloud.");
                     }
                 });
 
             }else
             {
-                AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
-                        .setMessage("Please generate token first.")
-                        .setCancelable(true)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                        })
-                        .create();
-                dialog.show();
+               alert("Please generate token first.");
             }
 
         });
@@ -153,5 +131,23 @@ public class AdminActivity extends AppCompatActivity {
         onBackPressed();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void alert(String message)
+    {
+        AlertDialog dialog = new AlertDialog.Builder(AdminActivity.this)
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton("Ok", (dialogInterface, i) -> {
+                })
+                .create();
+        dialog.show();
     }
 }
