@@ -84,17 +84,11 @@ public class AdminActivity extends AppCompatActivity {
         });
 
         generateToken.setOnClickListener(view -> {
-            if(isNetworkAvailable())
-            {
-                DatabaseReference adminsRef = FirebaseDatabase.getInstance().getReference("admins");
-                String secretToken = adminsRef.push().getKey();//UUID.randomUUID().toString();
-                token.setText(secretToken);
-                copy.setVisibility(View.VISIBLE);
-                share.setVisibility(View.VISIBLE);
-                alert("Token generated successfully, to make someone and admin first copy the token and authorize it by clicking on the Authorize button below. You can share the token with anyone you want to make admin.");
-            }else {
-                alert("An internet connection is required, please connect to an internet and retry.");
-            }
+            String secretToken = UUID.randomUUID().toString();
+            token.setText(secretToken);
+            copy.setVisibility(View.VISIBLE);
+            share.setVisibility(View.VISIBLE);
+            alert("Token generated successfully, to make someone and admin first copy the token and authorize it by clicking on the Authorize button below. You can share the token with anyone you want to make admin.");
         });
 
         authorize.setOnClickListener(view -> {
