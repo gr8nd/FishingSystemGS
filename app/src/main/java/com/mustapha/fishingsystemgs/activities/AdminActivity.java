@@ -88,7 +88,7 @@ public class AdminActivity extends AppCompatActivity {
             token.setText(secretToken);
             copy.setVisibility(View.VISIBLE);
             share.setVisibility(View.VISIBLE);
-            alert("Token generated successfully, to make someone an admin first copy the token and authorize it by clicking on the Authorize button below. You can share the token with anyone you want to make admin.");
+            alert("Token generated successfully. To make someone an admin first copy the token and authorize it by clicking on the Authorize Token button below. You can then share the token with anyone you want to make admin.");
         });
 
         authorize.setOnClickListener(view -> {
