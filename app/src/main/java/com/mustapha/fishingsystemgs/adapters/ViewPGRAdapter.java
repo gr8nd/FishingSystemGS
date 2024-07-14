@@ -34,12 +34,21 @@ import com.mustapha.fishingsystemgs.databases.TSDatabase;
 
 public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHolder> {
     private final Context context;
-
+    private final CharSequence[] options;
     private List<PGR> pgrs;
 
     public ViewPGRAdapter(Context context) {
         this.context = context;
         this.pgrs = new ArrayList<>();
+
+        options = new CharSequence[]{
+
+                context.getResources().getString(R.string.add_ts_to),
+                context.getResources().getString(R.string.copy_pgr),
+                context.getResources().getString(R.string.delete),
+                context.getResources().getString(R.string.edit),
+
+        };
     }
 
     @NonNull
@@ -56,43 +65,6 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         holder.name.setText(pgr.getName());
         String n = "(" + (position + 1) + ")";
         holder.number.setText(n);
-        holder.addTs.setOnClickListener(view -> {
-            holder.addTs.setVisibility(View.GONE);
-            holder.relativeLayout.setVisibility(View.VISIBLE);
-        });
-
-        holder.delete.setOnClickListener(view -> {
-            try {
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setMessage("Do you really want to delete this PGR?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes", (dialogInterface, i) -> {
-                            pgrs.remove(position);
-                            PGRDatabase pgrDb = new PGRDatabase(context,
-                                    "pgrs.db", null, 1);
-                            pgrDb.delete(pgr.getDna());
-                            notifyItemRemoved(position);
-                        })
-                        .create();
-                dialog.show();
-            }catch (Exception ignored)
-            {
-
-            }
-        });
-
-        holder.copy.setOnClickListener(view -> {
-            copy(pgr.getName());
-            //TODO
-        });
-
-        holder.edit.setOnClickListener(view -> {
-            holder.addTs.setVisibility(View.GONE);
-            holder.relativeLayout2.setVisibility(View.VISIBLE);
-            holder.firstDecimal.setText(String.valueOf(pgr.getFirstDecimalNumber()));
-            holder.secondDecimal.setText(String.valueOf(pgr.getSecondDecimalNumber()));
-            holder.edit.setVisibility(View.GONE);
-        });
 
         holder.secondDecimal.addTextChangedListener(new TextWatcher() {
             @Override
@@ -154,7 +126,6 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                             .setCancelable(true)
                             .setPositiveButton("Ok", (dialogInterface, i) -> {
                                 holder.relativeLayout2.setVisibility(View.GONE);
-                                holder.edit.setVisibility(View.VISIBLE);
                             })
                             .create();
                     dialog.show();
@@ -165,7 +136,6 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
                             .setCancelable(true)
                             .setPositiveButton("Ok", (dialogInterface, i) -> {
                                 holder.relativeLayout2.setVisibility(View.GONE);
-                                holder.edit.setVisibility(View.VISIBLE);
                             })
                             .create();
                     dialog.show();
@@ -197,7 +167,6 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         holder.add.setOnClickListener(view -> {
             try {
                 holder.relativeLayout.setVisibility(View.GONE);
-                holder.addTs.setVisibility(View.VISIBLE);
                 String s1 = holder.tsNameEdit.getText().toString().replace(" ", "");
                 if(s1.isEmpty())
                 {
@@ -216,6 +185,48 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
             {
                 alert("Please first type the TS name and click on the Add button.");
             }
+        });
+
+        holder.relativeLayout3.setOnLongClickListener(v -> {
+            //selectOption();
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+            builder.setCancelable(true);
+            builder.setItems(options, (dialog, index) -> {
+                CharSequence option = options[index];
+                if (option.equals(context.getResources().getString(R.string.delete)))
+                {
+                    try {
+                        AlertDialog dialog2 = new AlertDialog.Builder(context)
+                                .setMessage("Do you really want to delete this PGR?")
+                                .setCancelable(true)
+                                .setPositiveButton("Yes", (dialogInterface, i) -> {
+                                    pgrs.remove(position);
+                                    PGRDatabase pgrDb = new PGRDatabase(context,
+                                            "pgrs.db", null, 1);
+                                    pgrDb.delete(pgr.getDna());
+                                    notifyItemRemoved(position);
+                                })
+                                .create();
+                        dialog2.show();
+                    }catch (Exception ignored)
+                    {
+
+                    }
+                }  else if (option.equals(context.getResources().getString(R.string.edit)))
+                {
+                    holder.relativeLayout2.setVisibility(View.VISIBLE);
+                    holder.firstDecimal.setText(String.valueOf(pgr.getFirstDecimalNumber()));
+                    holder.secondDecimal.setText(String.valueOf(pgr.getSecondDecimalNumber()));
+                }else if(option.equals(context.getResources().getString(R.string.add_ts_to)))
+                {
+                    holder.relativeLayout.setVisibility(View.VISIBLE);
+                }else if(option.equals(context.getResources().getString(R.string.copy_pgr)))
+                {
+                    copy(pgr.getName());
+                }
+            });
+            builder.show();
+            return false;
         });
 
     }
@@ -247,6 +258,7 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
         clipboard.setPrimaryClip(clip);
         Toast.makeText(context, "PGR copied to clipboard", Toast.LENGTH_LONG).show();
     }
+
     public void filter(List<PGR> pgrs) {
         this.pgrs = pgrs;
         notifyDataSetChanged();
@@ -254,12 +266,9 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, ts, number;
-        private final Button addTs, add;
-        private final RelativeLayout relativeLayout, relativeLayout2;
+        private final Button add;
+        private final RelativeLayout relativeLayout, relativeLayout2, relativeLayout3;
         private final EditText tsNameEdit;
-
-        private final TextView delete, copy;
-        private final TextView edit;
         Button addBtn;
         EditText firstDecimal;
         EditText secondDecimal;
@@ -269,18 +278,15 @@ public class ViewPGRAdapter extends RecyclerView.Adapter<ViewPGRAdapter.ViewHold
             super(view);
 
             name = view.findViewById(R.id.name);
-            addTs =view.findViewById(R.id.add_ts);
             number = view.findViewById(R.id.number);
             add = view.findViewById(R.id.add);
-            delete = view.findViewById(R.id.delete);
-            copy = view.findViewById(R.id.copy);
-            edit = view.findViewById(R.id.edit);
             addBtn = view.findViewById(R.id.edit_pgr);
             firstDecimal = view.findViewById(R.id.firstDecimalEdit);
             secondDecimal = view.findViewById(R.id.secondDecimalEdit);
             formedPGR = view.findViewById(R.id.third_decimal);
             relativeLayout = view.findViewById(R.id.house1);
             relativeLayout2 = view.findViewById(R.id.house2);
+            relativeLayout3 = view.findViewById(R.id.relativeLayout);
             tsNameEdit = view.findViewById(R.id.tsNameEdit);
             ts = view.findViewById(R.id.ts);
         }

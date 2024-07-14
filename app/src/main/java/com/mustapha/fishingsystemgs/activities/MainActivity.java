@@ -67,11 +67,11 @@ public class MainActivity extends AppCompatActivity {
     private List<PGR> pgrList;
     private List<TS> list;
 
-    private List<TSG> tsgList;
+    //private List<TSG> tsgList;
 
     private static final String APPLICATION_ID = "com.mustapha.fishingsystemgs";
     private static final String ADMIN_TOKEN_KEY = APPLICATION_ID + "ADMIN_TOKEN_KEY";
-    private List<KVS> kvsList;
+   // private List<KVS> kvsList;
 
     private PGRDatabase pgrDb;
 
@@ -93,26 +93,27 @@ public class MainActivity extends AppCompatActivity {
         Button viewPGRBtn = findViewById(R.id.view_pgr);
         Button viewTSBtn = findViewById(R.id.view_tss);
 
-        Button viewKVSBtn = findViewById(R.id.view_kvs);
-        Button viewTSGBtn = findViewById(R.id.view_tsg);
+//        Button viewKVSBtn = findViewById(R.id.view_kvs);
+//        Button viewTSGBtn = findViewById(R.id.view_tsg);
 
         addPGRBtn = findViewById(R.id.add_mother);
-        addTSGBtn = findViewById(R.id.add_tsg);
+//      addTSGBtn = findViewById(R.id.add_tsg);
 
-        Button addTSG = findViewById(R.id.add_tsg_btn);
+        //Button addTSG = findViewById(R.id.add_tsg_btn);
 
         relativeLayout = findViewById(R.id.house1);
-        relativeLayout2 = findViewById(R.id.house3);
+        //relativeLayout2 = findViewById(R.id.house3);
         Button addBtn = findViewById(R.id.add);
         SearchView searchView = findViewById(R.id.searchView);
 
         initialise();
 
+
         EditText firstDecimal = findViewById(R.id.firstDecimalEdit);
         EditText secondDecimal = findViewById(R.id.secondDecimalEdit);
         TextView formedMother = findViewById(R.id.third_decimal);
 
-        EditText tsgEdit = findViewById(R.id.tsgNameEdit);
+        //EditText tsgEdit = findViewById(R.id.tsgNameEdit);
 
         viewPGRBtn.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ViewPGRActivity.class);
@@ -124,91 +125,91 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        viewKVSBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, ViewKVSActivity.class);
-            startActivity(intent);
-        });
-
-        viewTSGBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, ViewTSGActivity.class);
-            startActivity(intent);
-        });
+//        viewKVSBtn.setOnClickListener(view -> {
+//            Intent intent = new Intent(MainActivity.this, ViewKVSActivity.class);
+//            startActivity(intent);
+//        });
+//
+//        viewTSGBtn.setOnClickListener(view -> {
+//            Intent intent = new Intent(MainActivity.this, ViewTSGActivity.class);
+//            startActivity(intent);
+//        });
 
         addPGRBtn.setOnClickListener(view -> {
             relativeLayout.setVisibility(View.VISIBLE);
-            relativeLayout2.setVisibility(View.GONE);
+            //relativeLayout2.setVisibility(View.GONE);
             addPGRBtn.setVisibility(View.GONE);
         });
 
-        addTSGBtn.setOnClickListener(view -> {
-            relativeLayout2.setVisibility(View.VISIBLE);
-            relativeLayout.setVisibility(View.GONE);
-            addTSGBtn.setVisibility(View.GONE);
-        });
+//        addTSGBtn.setOnClickListener(view -> {
+//            //relativeLayout2.setVisibility(View.VISIBLE);
+//            relativeLayout.setVisibility(View.GONE);
+//            addTSGBtn.setVisibility(View.GONE);
+//        });
 
-        addTSG.setOnClickListener(view -> {
-            try {
-
-                String name = tsgEdit.getText().toString().trim().replace(" ", "");
-                if(!name.isEmpty())
-                {
-                    String dna = UUID.randomUUID().toString();;
-                    TSG tsg = new TSG(name, dna);
-                    TSGDatabase tsgDatabase = new TSGDatabase(this,
-                            "tsg.db", null, 1);
-
-                    boolean isDuplicate = false;
-                    for (TSG t: tsgDatabase.getTSGs())
-                    {
-                        if (tsg.getName().equals(t.getName())) {
-                            isDuplicate = true;
-                            break;
-                        }
-                    }
-
-                    if(!isDuplicate)
-                    {
-                        tsgDatabase.insert(tsg);
-                        AlertDialog dialog = new AlertDialog.Builder(this)
-                                .setMessage("Your TSG has been successfully stored.")
-                                .setCancelable(true)
-                                .setPositiveButton("Ok", (dialogInterface, i) -> {
-                                    relativeLayout.setVisibility(View.GONE);
-                                    relativeLayout2.setVisibility(View.GONE);
-                                    addPGRBtn.setVisibility(View.VISIBLE);
-                                    addTSGBtn.setVisibility(View.VISIBLE);
-                                })
-                                .create();
-                        dialog.show();
-                    }else
-                    {
-                        AlertDialog dialog = new AlertDialog.Builder(this)
-                                .setMessage("The TSG already exists.")
-                                .setCancelable(true)
-                                .setPositiveButton("Ok", (dialogInterface, i) -> {
-                                    relativeLayout.setVisibility(View.GONE);
-                                    relativeLayout2.setVisibility(View.GONE);
-                                    addPGRBtn.setVisibility(View.VISIBLE);
-                                    addTSGBtn.setVisibility(View.VISIBLE);
-                                })
-                                .create();
-                        dialog.show();
-                    }
-
-                }else {
-                    alert("Please type TSG name and then click on the Add button.");
-                    relativeLayout.setVisibility(View.GONE);
-                    relativeLayout2.setVisibility(View.GONE);
-                    addPGRBtn.setVisibility(View.VISIBLE);
-                    addTSGBtn.setVisibility(View.VISIBLE);
-                }
-
-            }catch (Exception ignored)
-            {
-               alert("Please type TSG name and then click on the Add button.");
-            }
-
-        });
+//        addTSG.setOnClickListener(view -> {
+//            try {
+//
+//                String name = tsgEdit.getText().toString().trim().replace(" ", "");
+//                if(!name.isEmpty())
+//                {
+//                    String dna = UUID.randomUUID().toString();;
+//                    TSG tsg = new TSG(name, dna);
+//                    TSGDatabase tsgDatabase = new TSGDatabase(this,
+//                            "tsg.db", null, 1);
+//
+//                    boolean isDuplicate = false;
+//                    for (TSG t: tsgDatabase.getTSGs())
+//                    {
+//                        if (tsg.getName().equals(t.getName())) {
+//                            isDuplicate = true;
+//                            break;
+//                        }
+//                    }
+//
+//                    if(!isDuplicate)
+//                    {
+//                        tsgDatabase.insert(tsg);
+//                        AlertDialog dialog = new AlertDialog.Builder(this)
+//                                .setMessage("Your TSG has been successfully stored.")
+//                                .setCancelable(true)
+//                                .setPositiveButton("Ok", (dialogInterface, i) -> {
+//                                    relativeLayout.setVisibility(View.GONE);
+//                                    relativeLayout2.setVisibility(View.GONE);
+//                                    addPGRBtn.setVisibility(View.VISIBLE);
+//                                    addTSGBtn.setVisibility(View.VISIBLE);
+//                                })
+//                                .create();
+//                        dialog.show();
+//                    }else
+//                    {
+//                        AlertDialog dialog = new AlertDialog.Builder(this)
+//                                .setMessage("The TSG already exists.")
+//                                .setCancelable(true)
+//                                .setPositiveButton("Ok", (dialogInterface, i) -> {
+//                                    relativeLayout.setVisibility(View.GONE);
+//                                    relativeLayout2.setVisibility(View.GONE);
+//                                    addPGRBtn.setVisibility(View.VISIBLE);
+//                                    addTSGBtn.setVisibility(View.VISIBLE);
+//                                })
+//                                .create();
+//                        dialog.show();
+//                    }
+//
+//                }else {
+//                    alert("Please type TSG name and then click on the Add button.");
+//                    relativeLayout.setVisibility(View.GONE);
+//                    relativeLayout2.setVisibility(View.GONE);
+//                    addPGRBtn.setVisibility(View.VISIBLE);
+//                    addTSGBtn.setVisibility(View.VISIBLE);
+//                }
+//
+//            }catch (Exception ignored)
+//            {
+//               alert("Please type TSG name and then click on the Add button.");
+//            }
+//
+//        });
 
         addBtn.setOnClickListener(view -> {
             try {
@@ -244,9 +245,9 @@ public class MainActivity extends AppCompatActivity {
                 alert("Please type First Decimal first, then type the Second Decimal and then click on the Add button.");
             }
             relativeLayout.setVisibility(View.GONE);
-            relativeLayout2.setVisibility(View.GONE);
+            //relativeLayout2.setVisibility(View.GONE);
             addPGRBtn.setVisibility(View.VISIBLE);
-            addTSGBtn.setVisibility(View.VISIBLE);
+            //addTSGBtn.setVisibility(View.VISIBLE);
         });
 
         secondDecimal.addTextChangedListener(new TextWatcher() {
@@ -301,11 +302,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        for (KVS ts : this.kvsList) {
-            if (ts.getName().contains(query)) {
-                tsList.add(ts);
-            }
-        }
+//        for (KVS ts : this.kvsList) {
+//            if (ts.getName().contains(query)) {
+//                tsList.add(ts);
+//            }
+//        }
 
 
         for (PGR pgr : this.pgrList) {
@@ -323,19 +324,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        for (TSG tsg : this.tsgList) {
-            String name = tsg.getName();
-            if (name.contains(query)) {
-                pgrSearched.setText(name);
-                String dna = tsg.getDna();
-                for (KVS kvs : this.kvsList) {
-                    String dnaOfMother = kvs.getDnaOfMother();
-                    if (dnaOfMother.equals(dna)) {
-                        tsList.add(kvs);
-                    }
-                }
-            }
-        }
+//        for (TSG tsg : this.tsgList) {
+//            String name = tsg.getName();
+//            if (name.contains(query)) {
+//                pgrSearched.setText(name);
+//                String dna = tsg.getDna();
+//                for (KVS kvs : this.kvsList) {
+//                    String dnaOfMother = kvs.getDnaOfMother();
+//                    if (dnaOfMother.equals(dna)) {
+//                        tsList.add(kvs);
+//                    }
+//                }
+//            }
+//        }
 
         adapter.updateList(tsList);
     }
@@ -422,28 +423,23 @@ public class MainActivity extends AppCompatActivity {
         TSDatabase tssDb = new TSDatabase(MainActivity.this,
                 "tss.db", null, 1);
 
-        TSGDatabase tsgsDb = new TSGDatabase(MainActivity.this,
-                "tsg.db", null, 1);
-
-        KVSDatabase kvssDb = new KVSDatabase(MainActivity.this,
-                "kvs.db", null, 1);
+//        TSGDatabase tsgsDb = new TSGDatabase(MainActivity.this,
+//                "tsg.db", null, 1);
+//
+//        KVSDatabase kvssDb = new KVSDatabase(MainActivity.this,
+//                "kvs.db", null, 1);
 
         DatabaseReference pgrsRef = FirebaseDatabase.getInstance().getReference("pgrs");
         pgrsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                pgrDb.deleteAll();
                 for(DataSnapshot dataSnapshot: snapshot.getChildren())
                 {
                     PGR pgr = dataSnapshot.getValue(PGR.class);
                     if(pgr != null && pgr.getDna() != null)
                     {
-                        int i = pgrDb.update(pgr.getDna(), pgr);
-                        if(i<0)
-                        {
-                            pgrDb.insert(pgr);
-                        }else {
-                            pgrDb.insert(pgr);
-                        }
+                        pgrDb.insert(pgr);
                     }
                 }
             }
@@ -456,18 +452,13 @@ public class MainActivity extends AppCompatActivity {
         tssRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tssDb.deleteAll();
                 for(DataSnapshot dataSnapshot: snapshot.getChildren())
                 {
                     TS ts = dataSnapshot.getValue(TS.class);
                     if(ts != null && ts.getDnaOfMother() != null)
                     {
-                        int i = tssDb.update(ts.getId(), ts);
-                        if(i<0)
-                        {
-                            tssDb.insert(ts);
-                        }else {
-                            tssDb.insert(ts);
-                        }
+                        tssDb.insert(ts);
                     }
                 }
             }
@@ -475,52 +466,55 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-        DatabaseReference tsgsRef = FirebaseDatabase.getInstance().getReference("tsgs");
-        tsgsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot: snapshot.getChildren())
-                {
-                    TSG tsg = dataSnapshot.getValue(TSG.class);
-                    if(tsg != null && tsg.getDna() != null)
-                    {
-                        int i = tsgsDb.update(tsg.getDna(), tsg);
-                        if(i<0)
-                        {
-                            tsgsDb.insert(tsg);
-                        }else {
-                            tsgsDb.insert(tsg);
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvss");
-        kvsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot: snapshot.getChildren())
-                {
-                    KVS kvs = dataSnapshot.getValue(KVS.class);
-                    if(kvs != null && kvs.getDnaOfMother() != null)
-                    {
-                        int i = kvssDb.update(kvs.getId(), kvs);
-                        if(i<0)
-                        {
-                            kvssDb.insert(kvs);
-                        }else {
-                            kvssDb.insert(kvs);
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+
+//        DatabaseReference tsgsRef = FirebaseDatabase.getInstance().getReference("tsgs");
+//        tsgsRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for(DataSnapshot dataSnapshot: snapshot.getChildren())
+//                {
+//                    TSG tsg = dataSnapshot.getValue(TSG.class);
+//                    if(tsg != null && tsg.getDna() != null)
+//                    {
+//                        int i = tsgsDb.update(tsg.getDna(), tsg);
+//                        if(i<0)
+//                        {
+//                            tsgsDb.insert(tsg);
+//                        }else {
+//                            tsgsDb.insert(tsg);
+//                        }
+//                    }
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
+
+//        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvss");
+//        kvsRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for(DataSnapshot dataSnapshot: snapshot.getChildren())
+//                {
+//                    KVS kvs = dataSnapshot.getValue(KVS.class);
+//                    if(kvs != null && kvs.getDnaOfMother() != null)
+//                    {
+//                        int i = kvssDb.update(kvs.getId(), kvs);
+//                        if(i<0)
+//                        {
+//                            kvssDb.insert(kvs);
+//                        }else {
+//                            kvssDb.insert(kvs);
+//                        }
+//                    }
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
+
     }
     private void syncFromOffline()
     {
@@ -532,13 +526,13 @@ public class MainActivity extends AppCompatActivity {
                 "tss.db", null, 1);
         List<TS> tss = tssDb.getTss();
 
-        TSGDatabase tsgsDb = new TSGDatabase(MainActivity.this,
-                "tsg.db", null, 1);
-        List<TSG> tsgs = tsgsDb.getTSGs();
-
-        KVSDatabase kvssDb = new KVSDatabase(MainActivity.this,
-                "kvs.db", null, 1);
-        List<KVS> kvss = kvssDb.getKVSs();
+//        TSGDatabase tsgsDb = new TSGDatabase(MainActivity.this,
+//                "tsg.db", null, 1);
+//        List<TSG> tsgs = tsgsDb.getTSGs();
+//
+//        KVSDatabase kvssDb = new KVSDatabase(MainActivity.this,
+//                "kvs.db", null, 1);
+//        List<KVS> kvss = kvssDb.getKVSs();
 
 
         DatabaseReference pgrsRef = FirebaseDatabase.getInstance().getReference("pgrs");
@@ -551,16 +545,16 @@ public class MainActivity extends AppCompatActivity {
         {
             tssRef.child(ts.getId()).setValue(ts);
         }
-        DatabaseReference tsgsRef = FirebaseDatabase.getInstance().getReference("tsgs");
-        for (TSG tsg: tsgs)
-        {
-            tsgsRef.child(tsg.getDna()).setValue(tsg);
-        }
-        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvss");
-        for (KVS kvs: kvss)
-        {
-            kvsRef.child(kvs.getId()).setValue(kvs);
-        }
+//        DatabaseReference tsgsRef = FirebaseDatabase.getInstance().getReference("tsgs");
+//        for (TSG tsg: tsgs)
+//        {
+//            tsgsRef.child(tsg.getDna()).setValue(tsg);
+//        }
+//        DatabaseReference kvsRef = FirebaseDatabase.getInstance().getReference("kvss");
+//        for (KVS kvs: kvss)
+//        {
+//            kvsRef.child(kvs.getId()).setValue(kvs);
+//        }
 
         syncFromOnline();
     }
@@ -733,8 +727,8 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         pgrList = new ArrayList<>();
 
-        tsgList = new ArrayList<>();
-        kvsList = new ArrayList<>();
+//        tsgList = new ArrayList<>();
+//        kvsList = new ArrayList<>();
 
         pgrSearched = findViewById(R.id.pgr_searched);
 
@@ -747,40 +741,40 @@ public class MainActivity extends AppCompatActivity {
         List<TS> ts = tsDb.getTss();
 
 
-        TSGDatabase tsgDb = new TSGDatabase(MainActivity.this,
-                "tsg.db", null, 1);
-        List<TSG> tsgs = tsgDb.getTSGs();
-
-        KVSDatabase kvsDb = new KVSDatabase(MainActivity.this,
-                "kvs.db", null, 1);
-        List<KVS> kvs = kvsDb.getKVSs();
+//        TSGDatabase tsgDb = new TSGDatabase(MainActivity.this,
+//                "tsg.db", null, 1);
+//        List<TSG> tsgs = tsgDb.getTSGs();
+//
+//        KVSDatabase kvsDb = new KVSDatabase(MainActivity.this,
+//                "kvs.db", null, 1);
+//        List<KVS> kvs = kvsDb.getKVSs();
 
         TextView pgrCounter = findViewById(R.id.pgr_count);
         TextView tsCounter = findViewById(R.id.ts_count);
-        TextView tsgCounter = findViewById(R.id.tsg_count);
-        TextView kvsCounter = findViewById(R.id.kvs_count);
+//        TextView tsgCounter = findViewById(R.id.tsg_count);
+//        TextView kvsCounter = findViewById(R.id.kvs_count);
 
         String pc = getResources().getString(R.string.pgr_count) + ": " + pgrDb.count();
         pgrCounter.setText(pc);
         String tc = getResources().getString(R.string.ts_count) + ": " + tsDb.count();
         tsCounter.setText(tc);
 
-        String tsgc = getResources().getString(R.string.tsg_count) + ": " + tsgDb.count();
-        tsgCounter.setText(tsgc);
-        String kvsc = getResources().getString(R.string.kvs_count) + ": " + kvsDb.count();
-        kvsCounter.setText(kvsc);
+        //String tsgc = getResources().getString(R.string.tsg_count) + ": " + tsgDb.count();
+        //tsgCounter.setText(tsgc);
+       // String kvsc = getResources().getString(R.string.kvs_count) + ": " + kvsDb.count();
+        //kvsCounter.setText(kvsc);
 
         pgrList.addAll(pgrs);
         list.addAll(ts);
 
-        tsgList.addAll(tsgs);
-        kvsList.addAll(kvs);
+//        tsgList.addAll(tsgs);
+//        kvsList.addAll(kvs);
 
         objectList.addAll(pgrList);
         objectList.addAll(list);
 
-        objectList.addAll(tsgList);
-        objectList.addAll(kvsList);
+//        objectList.addAll(tsgList);
+////        objectList.addAll(kvsList);
 
         adapter.setObjectList(objectList);
 

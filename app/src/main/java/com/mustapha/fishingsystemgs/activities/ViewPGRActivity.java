@@ -1,17 +1,24 @@
 package com.mustapha.fishingsystemgs.activities;
 
+import static com.google.android.material.internal.ContextUtils.getActivity;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.SearchView;
 
 
 import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.adapters.ViewPGRAdapter;
+import com.mustapha.fishingsystemgs.classes.ClickListener;
 import com.mustapha.fishingsystemgs.classes.PGR;
 
 import com.mustapha.fishingsystemgs.classes.TS;
@@ -52,6 +59,18 @@ public class ViewPGRActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         SearchView searchView = findViewById(R.id.searchView);
+//        recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(ViewPGRActivity.this,
+//                recyclerView, new ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                //triggers when click
+//            }
+//
+//            @Override
+//            public void onLongClick(View view, int position) {
+//                //triggers when you long press
+//            }
+//        }));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -105,4 +124,50 @@ public class ViewPGRActivity extends AppCompatActivity {
 
         adapter.filter(pgrList);
     }
+
+//    public class RecyclerViewItemClickListener implements RecyclerView.OnItemTouchListener {
+//
+//        //GestureDetector to detect touch event.
+//        private GestureDetector gestureDetector;
+//        private ClickListener clickListener;
+//
+//        public RecyclerViewItemClickListener(Context context, final RecyclerView recyclerView,
+//                                             final ClickListener clickListener) {
+//            this.clickListener = clickListener;
+//            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+//                @Override
+//                public boolean onSingleTapUp(MotionEvent e) {
+//                    return true;
+//                }
+//
+//                @Override
+//                public void onLongPress(MotionEvent e) {
+//                    //Find child on x and y position relative to screen
+//                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+//                    if (child != null && clickListener != null) {
+//                        clickListener.onLongClick(child, recyclerView.getChildLayoutPosition(child));
+//                    }
+//                }
+//            });
+//        }
+//
+//        @Override
+//        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+//            //On Touch event
+//            View child = rv.findChildViewUnder(e.getX(), e.getY());
+//            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+//                clickListener.onClick(child, rv.getChildLayoutPosition(child));
+//            }
+//            return false;
+//        }
+//
+//        @Override
+//        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+//        }
+//
+//        @Override
+//        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+//
+//        }
+//    }
 }

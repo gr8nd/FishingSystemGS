@@ -2,6 +2,8 @@ package com.mustapha.fishingsystemgs.adapters;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,18 +25,27 @@ import com.mustapha.fishingsystemgs.R;
 import com.mustapha.fishingsystemgs.classes.TS;
 import com.mustapha.fishingsystemgs.databases.TSDatabase;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder> {
     private final Context context;
     private String result;
-
+    private final CharSequence[] options;
     private List<TS> tsList;
 
     public ViewTSAdapter(Context context) {
         this.context = context;
         this.tsList = new ArrayList<>();
+        options = new CharSequence[]{
+
+                context.getResources().getString(R.string.subtract),
+                context.getResources().getString(R.string.copy_ts),
+                context.getResources().getString(R.string.delete),
+                context.getResources().getString(R.string.edit),
+
+        };
     }
 
     @NonNull
@@ -51,40 +62,6 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
         holder.name.setText(ts.getName());
         String n = "(" + (position + 1) + ")";
         holder.number.setText(n);
-
-        holder.delete.setOnClickListener(view -> {
-            AlertDialog dialog = new AlertDialog.Builder(context)
-                    .setMessage("Do you really want to delete this TS?")
-                    .setCancelable(true)
-                    .setPositiveButton("Yes", (dialogInterface, i) -> {
-                        tsList.remove(position);
-                        TSDatabase tsDb = new TSDatabase(context,
-                                "tss.db", null, 1);
-                        tsDb.delete(ts.getId());
-                        notifyItemRemoved(position);
-                    })
-                    .create();
-            dialog.show();
-        });
-
-        holder.copy.setOnClickListener(view -> {
-            copy(ts.getName());
-        });
-
-        holder.copyChild.setOnClickListener(view -> {
-            copyResult(result);
-        });
-
-        holder.edit.setOnClickListener(view -> {
-            holder.relativeLayout.setVisibility(View.VISIBLE);
-            holder.edit.setVisibility(View.GONE);
-            holder.tsNameEdit.setText(ts.getTsName());
-        });
-
-        holder.subtractTs.setOnClickListener(view -> {
-            holder.subtractRelativeLayout.setVisibility(View.VISIBLE);
-            holder.subtractTs.setVisibility(View.GONE);
-        });
 
         holder.sub.setOnClickListener(view -> {
             String firstTs = holder.firstTsEdit.getText().toString().trim().replaceFirst(" ", "");
@@ -109,7 +86,6 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
         holder.add.setOnClickListener(view -> {
             try {
                 holder.relativeLayout.setVisibility(View.GONE);
-                holder.edit.setVisibility(View.VISIBLE);
                 String s1 = holder.tsNameEdit.getText().toString().replace(" ", "");
                 if(s1.isEmpty())
                 {
@@ -148,7 +124,41 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
             }
         });
 
+        holder.relativeLayout3.setOnLongClickListener(v -> {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+            builder.setCancelable(true);
+            builder.setItems(options, (dialog, index) -> {
+                CharSequence option = options[index];
+                if (option.equals(context.getResources().getString(R.string.delete)))
+                {
+                    AlertDialog dialog2 = new AlertDialog.Builder(context)
+                            .setMessage("Do you really want to delete this TS?")
+                            .setCancelable(true)
+                            .setPositiveButton("Yes", (dialogInterface, i) -> {
+                                tsList.remove(position);
+                                TSDatabase tsDb = new TSDatabase(context,
+                                        "tss.db", null, 1);
+                                tsDb.delete(ts.getId());
+                                notifyItemRemoved(position);
+                            })
+                            .create();
+                    dialog2.show();
 
+                }  else if (option.equals(context.getResources().getString(R.string.edit)))
+                {
+                    holder.relativeLayout.setVisibility(View.VISIBLE);
+                    holder.tsNameEdit.setText(ts.getTsName());
+                }else if(option.equals(context.getResources().getString(R.string.subtract)))
+                {
+                    holder.subtractRelativeLayout.setVisibility(View.VISIBLE);
+                }else if(option.equals(context.getResources().getString(R.string.copy_ts)))
+                {
+                    copy(ts.getName());
+                }
+            });
+            builder.show();
+            return false;
+        });
     }
 
     private void alert(String message)
@@ -194,31 +204,28 @@ public class ViewTSAdapter extends RecyclerView.Adapter<ViewTSAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, number, ts;
-        private final TextView delete, edit, copy, copyChild, sub, subtractTs;
 
         private final EditText tsNameEdit;
 
         private final EditText firstTsEdit, secondTsEdit;
-        private final RelativeLayout relativeLayout, subtractRelativeLayout;
-        private final Button add;
+        private final RelativeLayout relativeLayout, subtractRelativeLayout, relativeLayout3;
+        private final Button add, sub;
+        public TextView copyChild;
 
         ViewHolder(View view) {
             super(view);
 
             name = view.findViewById(R.id.name);
-            delete =view.findViewById(R.id.delete);
-            edit = view.findViewById(R.id.edit);
-            copy = view.findViewById(R.id.copy);
+            copyChild = view.findViewById(R.id.copy_child);
             subtractRelativeLayout = view.findViewById(R.id.subtract_relative_layout);
-            subtractTs = view.findViewById(R.id.subtract_ts);
             firstTsEdit = view.findViewById(R.id.firstTSEdit);
             secondTsEdit = view.findViewById(R.id.secondTSEdit);
-            sub = view.findViewById(R.id.sub);
-            copyChild = view.findViewById(R.id.copy_child);
             tsNameEdit = view.findViewById(R.id.tsNameEdit);
             relativeLayout = view.findViewById(R.id.house1);
+            relativeLayout3 = view.findViewById(R.id.relativeLayout);
             ts = view.findViewById(R.id.ts);
             add = view.findViewById(R.id.add);
+            sub = view.findViewById(R.id.sub);
             number = view.findViewById(R.id.number);
         }
     }
